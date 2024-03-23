@@ -26,9 +26,9 @@ def home():
     return render_template('home.html', posts=posts)
 
 
-@app.route("/about")
+@app.route("/profile")
 def about():
-    return render_template('about.html', title='About')
+    return render_template('profile.html', title='About')
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -50,6 +50,14 @@ def login():
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html', title='Login', form=form)
+
+@app.route("/plumber")
+def plumber_dashboard():
+    return render_template('plumber.html', title='register')
+
+@app.route('/client')
+def client_view():
+    return render_template('client.html', title='client')
 
 
 if __name__ == '__main__':

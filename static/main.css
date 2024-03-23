@@ -1,7 +1,16 @@
 body {
-    background: #fafafa;
-    color: #333333;
+    background: #eee9e9;
+    color: #0e130d;
     margin-top: 3rem;
+  }
+
+  .footer {
+    padding: 15px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    text-align: center;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -29,7 +38,7 @@ body {
     padding: 10px 20px;
     border: 1px solid #dddddd;
     border-radius: 3px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
   }
   
   .article-title {

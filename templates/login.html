@@ -1,11 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
+<div class="container id="cont">
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <form class="col-md-4">
+        <form class="col-md-10">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email address">
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email address">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>
