@@ -4,14 +4,15 @@
 * {
     padding: 0;
     margin: 0;
-    font-family: sans-serif;
-    box-sizing: content-box;
+    font-family: comfortaa, sans-serif;
+    box-sizing: border-box;
 }
 
-body {
-    display: flex;
-    min-height: 100vh;
-    justify-content: center;
-    align-items: center;
-    background: #f1f1f1;
+form {
+    width: 40%;
+    padding: 20px;
+    border-radius: 20px;
+    align-content: center;
+    margin-bottom: 3rem;
+    margin-top: 4rem;
 }
