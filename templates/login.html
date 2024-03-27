@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <form class="mx-auto">
-    <div class="mb-3 mt-5">
+    <div class="mb-3 mt-2">
       <legend class="border-bottom mb-4">Login Here</legend>
         <div class="form-group">
           {{ form.email.label(class="form-control-label") }}
@@ -34,9 +34,9 @@
           <div class="mt-3">
             <button type="submit" class="btn btn-primary btn-sm">Login</button>
           </div>
-          <div class="border-top pt-3 text-center">
+          <div class="border-top mt-3 pt-4 text-center">
             <small class="text-muted">
-                Not signed up yet? <a class="ml-2" href="{{ url_for('register') }}">Sign up</a>
+                Not signed up yet? <a class="ml-4" href="{{ url_for('register') }}">Sign up</a>
             </small>
           </div>
     </div>

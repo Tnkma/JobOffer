@@ -3,19 +3,24 @@
   margin: 0;
 
 }
-body {
-    background: #eee9e9;
-    color: #0e130d;
-    margin-top: 3rem;
-  }
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
 
   .footer {
-    padding: 15px 0;
-    bottom: 0;
-    width: 100%;
-    background-color: #f8f9fa;
+    background-color: #f0f0f0;
+    padding: 20px;
     text-align: center;
-  }
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+}
   
   h1, h2, h3, h4, h5, h6 {
     color: #444444;
