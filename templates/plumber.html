@@ -1,16 +1,50 @@
 {% extends "layout.html" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plumc.css') }}">
-<div class="container">
-    <div class="sidenav">
-        <a href="#">Link</a>
-        <a href="#">Link</a>
-        <a href="#">Link</a>
-    </div>
 
-    <div class="content">
-        <h2>CSS Template</h2>
-        <p>A full-height, fixed sidenav and content.</p>
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <div class="bg-dark col-auto col-md-2 min-vh-100">
+      <div class="bg-dark p-4">
+        <ul class="nav nav-pills flex-column mt-5">
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="fs-6 fas fa-tachometer-alt"></i>
+                    <span class="fs-5.5 d-none d-sm-inline">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="fs-6 fas fa-home"></i>
+                    <span class="fs-5.5 d-none d-sm-inline">Home</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="fs-6 fas fa-briefcase"></i>
+                    <span class="fs-5.5 d-none d-sm-inline">Current Job</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="fs-6 fas fa-history"></i>
+                    <span class="fs-5.5 d-none d-sm-inline">Previous jobs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="fs-6 fas fa-envelope"></i>
+                    <span class="fs-5.5 d-none d-sm-inline">Messages</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="fs-6 fas fa-star"></i>
+                    <span class="fs-5.5 d-none d-sm-inline">Average Rank</span>
+            </a>
+          </li> 
+        </ul>
+      </div>
     </div>
-</div
+  </div>
+</div>
 {% endblock %}
