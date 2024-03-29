@@ -51,7 +51,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
-    Phone = StringField('Phone Number', validators=[validate_phone, DataRequired()])
+    Phone = StringField('Phone Number (+234)', validators=[validate_phone, DataRequired()])
     state = SelectField('State', choices=STATE_CHOICE)
     submit = SubmitField('Sign Up')
 
