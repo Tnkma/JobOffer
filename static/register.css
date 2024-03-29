@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
 
-
 * {
     padding: 0;
     margin: 0;
@@ -9,7 +8,8 @@
 }
 
 form {
-    width: 40%;
+    width: 50%;
     border-radius: 20px;
     align-content: center;
+    margin-top: auto;
 }

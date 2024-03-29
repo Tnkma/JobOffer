@@ -2,17 +2,22 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
 <div class="container d-flex justify-content-center align-items-center vh-100">
-  <form method="POST" action="/login" class="mx-auto">
+  <form method="POST" action="" class="mx-auto">
     {{ form.hidden_tag() }}
     <div class="mb-3 mt-2">
-      {% for message in get_flashed_messages() %}
-      {% if message %}
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div
+          class="alert alert-{{ category }} alert-dismissible fade show"
+          role="alert">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"></button>
           {{ message }}
-      </div>
-      {% endif %}
-      {% endfor %}
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
       <legend class="border-bottom mb-4">Please Login Here</legend>
         <div class="form-group">
           {{ form.email.label(class="form-control-label") }}
@@ -51,5 +56,4 @@
     </div>
   </form>
 </div>
-
 {% endblock %}
