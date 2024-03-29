@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 """ Storage Class for the database """
-from model.base import BaseUser, JobOffer, Base
-from model.base import Client, Plumber
-import models
+from model.base import JobOffer, Client, Plumber, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from model import classes
@@ -25,7 +23,7 @@ class DataStorage:
             return self.__session.query(Client).all()
         if cls not in classes.values():
             return None
-        all_cls = models.storage.all(cls)
+        all_cls = model.storage.all(cls)
         return all_cls
     
     
