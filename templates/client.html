@@ -1,46 +1,47 @@
-{% extends "layout.html" %} {% block content %}
-
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plum.css') }}">
 <div class="container-fluid">
   <div class="row flex-nowrap">
-    <div class="bg-dark col-auto col-md-2 min-vh-100">
+    <div class="bg-dark col-auto col-md-4 col-lg-3 min-vh-100">
       <div class="bg-dark p-4">
         <ul class="nav nav-pills flex-column mt-5">
           <li class="nav-item">
             <a href="#" class="nav-link text-white">
-              <i class="fs-6 fas fa-tachometer-alt"></i>
-              <span class="fs-5.5 d-none d-sm-inline">Dashboard</span>
+                <i class="fs-5 fas fa-tachometer-alt"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item py-2 py-sm-0 mask">
             <a href="#" class="nav-link text-white">
-              <i class="fs-6 fas fa-home"></i>
-              <span class="fs-5.5 d-none d-sm-inline">Home</span>
+                <i class="fs-5 fas fa-home"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">Home</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item py-2 py-sm-0 mask">
             <a href="#" class="nav-link text-white">
-              <i class="fs-6 fas fa-briefcase"></i>
-              <span class="fs-5.5 d-none d-sm-inline">Current Job</span>
+                <i class="fs-5 fas fa-briefcase"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">Posted Jobs</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item py-2 py-sm-0 mask">
             <a href="#" class="nav-link text-white">
-              <i class="fs-6 fas fa-history"></i>
-              <span class="fs-5.5 d-none d-sm-inline">Previous jobs</span>
+                <i class="fs-5 fas fa-history"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">Previous jobs</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item py-2 py-sm-0 mask">
             <a href="#" class="nav-link text-white">
-              <i class="fs-6 fas fa-envelope"></i>
-              <span class="fs-5.5 d-none d-sm-inline">Messages</span>
+                <i class="fs-5 fas fa-envelope"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">Messages</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item py-2 py-sm-0 mask">
             <a href="#" class="nav-link text-white">
-              <i class="fs-6 fas fa-faucet"></i>
-              <span class="fs-5.5 d-none d-sm-inline">Get Plumbers</span>
+                <i class="fs-5 fas fa-wrench"></i>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">Get A Plumber</span>
             </a>
-          </li>
+          </li> 
         </ul>
       </div>
     </div>
