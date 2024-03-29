@@ -4,9 +4,11 @@
 from datetime import datetime
 from app import Base
 from werkzeug.security import generate_password_hash
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float, Table
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float, Table, MetaData
 from sqlalchemy.orm import relationship
 
+
+metadata = MetaData()
 
 
 class BaseUser(Base):
@@ -56,7 +58,8 @@ class Client(BaseUser):
         """ Returns the clients repr """
         return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone_no}', '{self.state}')"
     
-jobs_plumbers = Table('jobs_plumbers',
+     
+jobs_plumbers = Table('jobs_plumbers', metadata,
     Column('job_id', Integer, ForeignKey('jobs.id'), primary_key=True),
     Column('plumber_id', Integer, ForeignKey('plumbers.id'), primary_key=True)
 )
