@@ -43,24 +43,37 @@ class Job(Base):
     job_title = Column(String(100), nullable=False)
     content = Column(String(1000), nullable=False)
     date_posted = Column(DateTime, nullable=False, default=datetime.utcnow)
+    location = Column(String(100), nullable=False)
     # Define a one-to-many relationship with Message model
     messages = relationship('Message', cascade='all, delete-orphan', backref='job')
     # Define a one-to-many relationship with Rank model
     ratings = relationship('Rank', cascade='all, delete-orphan', backref='job')
     
     
+    def __str__(self):
+        return f"JobOffer('{self.job_title}', '{self.date_posted}', '{self.client_id}', '{self.content}', '{self.location}')"
+    
+    
     def __repr__(self):
-        return f"JobOffer('{self.job_title}', '{self.date_posted}')"
+        return f"JobOffer('{self.job_title}', '{self.date_posted}', '{self.client_id}', '{self.content}', '{self.location}')"
         
 class Client(BaseUser):
     """ Clients models inheriting from BaseUser """
     __tablename__ = 'clients'
     id = Column(Integer, ForeignKey('users.id'), primary_key=True)
     jobs = relationship('Job', backref='client', lazy='dynamic')
+    completed_jobs = relationship('Job', backref='completed_client', lazy='dynamic')
+    
+    def __init__(self, username, email, phone_no, state):
+        super().__init__(username=username, email=email, phone_no=phone_no, state=state)
+        
+    def __str__(self):
+        """ Returns the clients str """
+        return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone_no}', '{self.state}', completed_jobs={self.completed_jobs})"
     
     def __repr__(self):
         """ Returns the clients repr """
-        return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone_no}', '{self.state}')"
+        return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone_no}', '{self.state}', completed_jobs={self.completed_jobs})"
     
      
 jobs_plumbers = Table('jobs_plumbers', metadata,
@@ -76,10 +89,19 @@ class Plumber(BaseUser):
     jobs_assigned = relationship('Job', secondaryjoin='jobs_plumbers', backref='assigned_plumbers', lazy='dynamic')# many-to-many relationship
     bio = Column(Text, nullable=False)
     service_areas = Column(String(100), nullable=False)
+    completed_jobs = relationship('Job', backref='completed_plumber', lazy='dynamic')
+    
+    def __init__(self, username, email, phone_no, state, bio, service_areas):
+        super().__init__(username=username, email=email, phone_no=phone_no, state=state)
+        self.bio = bio
+        self.service_areas = service_areas
+        
+    def __str__(self):
+        return f"Plumber('{self.username}', '{self.email}', '{self.service_areas}', '{self.phone_no}', '{self.service_areas}', '{self.state}', '{self.bio}', '{self.image_file}', completed_jobs={self.completed_jobs})"
 
     
     def __repr__(self):
-        return f"Plumber('{self.username}', '{self.email}', '{self.service_areas}', '{self.phone_no}', '{self.service_areas}', '{self.state}', '{self.bio}')"
+        return f"Plumber('{self.username}', '{self.email}', '{self.service_areas}', '{self.phone_no}', '{self.service_areas}', '{self.state}', '{self.bio}', '{self.image_file}', completed_jobs={self.completed_jobs})"
 
 class Message(Base):
     """Message model for clients and plumbers"""
@@ -90,9 +112,14 @@ class Message(Base):
     client_id = Column(Integer, ForeignKey('clients.id'))
     plumber_id = Column(Integer, ForeignKey('plumbers.id'))
     
+    
+    def __str__(self):
+        """Returns the string representation of Message"""
+        return f"Message('{self.message}', '{self.date_sent}', '{self.client_id}', '{self.plumber_id}')"
+    
     def __repr__(self):
         """Returns the string representation of Message"""
-        return f"Message('{self.message}', '{self.date_sent}')"
+        return f"Message('{self.message}', '{self.date_sent}', '{self.client_id}', '{self.plumber_id}')"
     
 class Rank(Base):
     """Ranking model for clients and plumbers"""
@@ -104,4 +131,8 @@ class Rank(Base):
     
     def __repr__(self):
         """Returns the string representation of Ranking"""
-        return f"Ranking('{self.rating}')"
+        return f"Ranking('{self.rating}', '{self.client_id}', '{self.plumber_id}')"
+    
+    def __str__(self):
+        """Returns the string representation of Ranking"""
+        return f"Ranking('{self.rating}', '{self.client_id}', '{self.plumber_id}')"

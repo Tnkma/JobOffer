@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from forms import Registration_Form, Login_Form
 from flask_login import LoginManager, login_user, current_user, login_required
 from functions import valid_login
-from model.base import Client, Plumber
 from model.engine.file_storage import DataStorage as store_data
 from flask_migrate import Migrate
 
@@ -23,6 +22,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Base = db.Model
 migrate = Migrate(app, db)
+
+from model.base import Client, Plumber
+
+
 posts = [
     {
         'author': 'Corey Schafer',

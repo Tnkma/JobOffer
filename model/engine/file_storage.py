@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Storage Class for the database """
-from . import Client
+from model.base import Client
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model.base import classes
