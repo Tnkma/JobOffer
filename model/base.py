@@ -3,15 +3,15 @@
 
 from datetime import datetime
 from app import Base
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float, Table, MetaData
 from sqlalchemy.orm import relationship
 
-
 metadata = MetaData()
 
 
-class BaseUser(Base):
+class BaseUser(Base, UserMixin):
     """The Base User for clients and plumbers"""
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -30,6 +30,10 @@ class BaseUser(Base):
     def set_password(self, password):
         """ Generate a password hash """
         self.password_hash = generate_password_hash(password)
+        
+    def get_id(self):
+        """ Returns the User_id (primary key)"""
+        return self.id
     
     
 class Job(Base):
@@ -69,7 +73,9 @@ class Plumber(BaseUser):
     """ Plumber models from Baseuser """
     __tablename__ = 'plumbers'
     id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    jobs_assigned = relationship('Job', secondaryjoin='jobs_plumbers', backref='assigned_plumbers', lazy='dynamic')  # many-to-many relationship
+    jobs_assigned = relationship('Job', secondaryjoin='jobs_plumbers', backref='assigned_plumbers', lazy='dynamic')# many-to-many relationship
+    bio = Column(Text, nullable=False)
+    service_areas = Column(String(100), nullable=False)
 
     
     def __repr__(self):

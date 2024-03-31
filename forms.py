@@ -1,5 +1,5 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+# from flask_wtf import FlaskForm
+from wtforms import Form, StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from functions import validate_phone
 
@@ -43,7 +43,7 @@ STATE_CHOICE = [
     ('Zamfara', 'Zamfara')
 ]
 
-class RegistrationForm(FlaskForm):
+class Registration_Form(Form):
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
@@ -55,7 +55,7 @@ class RegistrationForm(FlaskForm):
     state = SelectField('State', choices=STATE_CHOICE)
     submit = SubmitField('Sign Up')
 
-class LoginForm(FlaskForm):
+class Login_Form(Form):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
