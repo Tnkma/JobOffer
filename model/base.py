@@ -18,7 +18,7 @@ class BaseUser(Base, UserMixin):
     username = Column(String(80), unique=True, nullable=False)
     email = Column(String(120), unique=True, nullable=False)
     image_file = Column(String(20), nullable=False, default='default.jpg')
-    password_hash = Column(String(60), nullable=False)
+    password = Column(String(60), nullable=False)
     date_joined = Column(DateTime, nullable=False, default=datetime.utcnow)
     phone_no = Column(Integer, unique=True, nullable=False)
     state = Column(String(20), nullable=False)
@@ -26,10 +26,6 @@ class BaseUser(Base, UserMixin):
     def __repr__(self):
         """Returns the string representation of our BaseUser"""
         return f"BaseUser('{self.username}', '{self.email}', '{self.image_file}')"
-    
-    def set_password(self, password):
-        """ Generate a password hash """
-        self.password_hash = generate_password_hash(password)
         
     def get_id(self):
         """ Returns the User_id (primary key)"""

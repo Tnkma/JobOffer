@@ -41,14 +41,14 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
-                  <a class="nav-item nav-link" href="">Home</a>
+                  <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
                   <a class="nav-item nav-link" href="">Post New Job</a>
                 </div>
               </div>
               <div class="navbar-nav nav justify-content-end">
-                <a class="nav-item nav-link" href="">Login</a>
-                <a class="nav-item nav-link" href="">Register</a>
-                <a class="nav-item nav-link" href="">Logout</a>
+                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
               </div>
             </div>
           </nav>

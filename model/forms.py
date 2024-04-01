@@ -2,6 +2,7 @@
 from wtforms import Form, StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from phonenumbers import parse, is_valid_number, phonenumberutil
+from flask_wtf import FlaskForm
 
 STATE_CHOICE = [
     ('Abia', 'Abia'),
@@ -52,7 +53,7 @@ def validate_phone(form, field):
     except (phonenumberutil.NumberParseException, ValueError):
         raise ValidationError("Invalid phone number format")
 
-class Registration_Form(Form):
+class RegistrationForm(FlaskForm):
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
@@ -64,18 +65,9 @@ class Registration_Form(Form):
     state = SelectField('State', choices=STATE_CHOICE)
     submit = SubmitField('Sign Up')
 
-class Login_Form(Form):
+class LoginForm(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
-    
-    
-    
-def valid_login(username, password):
-    # Replace this with your actual authentication logic, such as querying a database
-    if username == 'admin@gmail.com' and password == 'password':
-        return True
-    else:
-        return False

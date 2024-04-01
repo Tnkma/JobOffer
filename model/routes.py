@@ -1,6 +1,6 @@
-from model import app
-from model.forms import Registration_Form, Login_Form, valid_login
-from flask_login import current_user, login_required
+from model import app, Base, bcrypt
+from model.forms import RegistrationForm, LoginForm
+from flask_login import current_user, login_required, login_user
 from flask import render_template, url_for, flash, redirect, request, session
 from model.base import Client, Plumber
 from flask_login import LoginManager
@@ -45,11 +45,13 @@ def home():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     """ Register a new client """
-    form = Registration_Form(request.form)
+    form = RegistrationForm()
     if form.validate_on_submit():
-        user = Client(username=form.username.data, email=form.email.data, phone_no=form.phone.data, state=form.state.data)
-        store_data.add_new(user)
-        flash(f'Account created for {form.username.data}!', 'success')
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        client = Client(username=form.username.data, email=form.email.data, password=hashed_password, phone_no=form.phone.data, state=form.state.data)
+        store_data.add_new(client)
+        store_data.db_commit()
+        flash(f'Account created, You can now login', 'success')
         return redirect(url_for('login'))
     flash(f'Account not created, Please fill the forms correctly!', 'danger')
     return render_template('register.html', title='Register', form=form)
@@ -58,14 +60,12 @@ def register():
 @app.route("/login", methods=['GET', 'POST'], strict_slashes=False)
 def login():
     """We create a object of the Login_Form class"""
-    form = Login_Form()
+    form = LoginForm()
     if form.validate_on_submit():
-        if valid_login(form.email.data, form.password.data):
-            session['username'] = request.form['username']
-            flash('You have been logged in!', 'success')
-            return redirect(url_for('client_view'))
-        else:
-            flash('Login Unsuccessful. Please check username and password', 'danger')    
+        flash('You have been logged in!', 'success')
+        return redirect(url_for('client_view'))
+    else:
+        flash('Login Unsuccessful. Please check username and password', 'danger')    
     return render_template('login.html', title='Login', form=form)
 
 
