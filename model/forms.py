@@ -44,7 +44,7 @@ STATE_CHOICE = [
     ('Zamfara', 'Zamfara')
 ]
 
-def validate_phone(form, field):
+def validate_phone(FlaskForm, field):
     """ Validates the client phone number """
     try:
         phone_no = parse(field.data)
@@ -61,7 +61,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
-    Phone = StringField('Phone Number (+234)', validators=[validate_phone, DataRequired()])
+    phone = StringField('Phone Number (+234)', validators=[validate_phone, DataRequired()])
     state = SelectField('State', choices=STATE_CHOICE)
     submit = SubmitField('Sign Up')
 

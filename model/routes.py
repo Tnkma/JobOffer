@@ -4,7 +4,7 @@ from flask_login import current_user, login_required, login_user
 from flask import render_template, url_for, flash, redirect, request, session
 from model.base import Client, Plumber
 from flask_login import LoginManager
-from model.file_storage import DataStorage as store_data
+from model.func import *
 
 
 
@@ -29,10 +29,12 @@ posts = [
 ]
 
 
+
+
 @login_manager.user_loader
 def load_user(user_id):
     # Assuming Client objects have a primary key 'id'
-    return store_data.get_single(Client, id=user_id)
+    return get_single(Client, id=user_id)
 
 
 @app.route("/")
@@ -48,9 +50,9 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        client = Client(username=form.username.data, email=form.email.data, password=hashed_password, phone_no=form.phone.data, state=form.state.data)
-        store_data.add_new(client)
-        store_data.db_commit()
+        client = Client(username=form.username.data, email=form.email.data, password=hashed_password, phone=form.phone.data, state=form.state.data)
+        new(client)
+        save()
         flash(f'Account created, You can now login', 'success')
         return redirect(url_for('login'))
     flash(f'Account not created, Please fill the forms correctly!', 'danger')
@@ -62,6 +64,7 @@ def login():
     """We create a object of the Login_Form class"""
     form = LoginForm()
     if form.validate_on_submit():
+        
         flash('You have been logged in!', 'success')
         return redirect(url_for('client_view'))
     else:
@@ -100,7 +103,7 @@ def update_profile():
     current_client = current_user()
     current_client.service_areas = service_areas
     current_client.bio = bio
-    store_data.db_commit()
+    save()
     # return 'Profile updated successfully!'
     flash('Profile updated successfully!', 'success')
  
