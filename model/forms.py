@@ -43,6 +43,15 @@ STATE_CHOICE = [
     ('Zamfara', 'Zamfara')
 ]
 
+def validate_phone(form, field):
+    """ Validates the client phone number """
+    try:
+        phone_no = parse(field.data)
+        if not is_valid_number(phone_no):
+            raise ValueError("Invalid phone number")
+    except (phonenumberutil.NumberParseException, ValueError):
+        raise ValidationError("Invalid phone number format")
+
 class Registration_Form(Form):
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
@@ -62,15 +71,6 @@ class Login_Form(Form):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
     
-    
-def validate_phone(form, field):
-    """ Validates the client phone number """
-    try:
-        phone_no = parse(field.data)
-        if not is_valid_number(phone_no):
-            raise ValueError("Invalid phone number")
-    except (phonenumberutil.NumberParseException, ValueError):
-        raise ValidationError("Invalid phone number format")
     
     
 def valid_login(username, password):

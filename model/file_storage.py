@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """ Storage Class for the database """
-import model.base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from model.base import classes
+from model.base import BaseUser, Job, Rank, Message, Plumber, Client
 from flask import current_app
 
-classes = model.base.classes
+classes = {
+    "BaseUser": BaseUser, "Job": Job, "Rank": Rank, "Message": Message, "Plumber": Plumber, "Client": Client
+}
 
 class DataStorage:
     """ Interacts with our database """

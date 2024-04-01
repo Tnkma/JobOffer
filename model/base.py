@@ -2,7 +2,7 @@
 """Base models for other models"""
 
 from datetime import datetime
-from app import Base
+from model import Base
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float, Table, MetaData

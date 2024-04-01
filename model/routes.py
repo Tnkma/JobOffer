@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from flask import render_template, url_for, flash, redirect, request, session
 from model.base import Client, Plumber
 from flask_login import LoginManager
-from model.engine.file_storage import DataStorage as store_data
+from model.file_storage import DataStorage as store_data
 
 
 
@@ -29,6 +29,12 @@ posts = [
 ]
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    # Assuming Client objects have a primary key 'id'
+    return store_data.get_single(Client, id=user_id)
+
+
 @app.route("/")
 @app.route("/home")
 def home():
@@ -49,7 +55,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route("/login", methods=['GET', 'POST'], STRICT_SLASHES=False)
+@app.route("/login", methods=['GET', 'POST'], strict_slashes=False)
 def login():
     """We create a object of the Login_Form class"""
     form = Login_Form()
@@ -62,25 +68,31 @@ def login():
             flash('Login Unsuccessful. Please check username and password', 'danger')    
     return render_template('login.html', title='Login', form=form)
 
-@app.route("/plumber")
-def plumber_dashboard():
-    return render_template('plumber.html', title='register')
 
-@app.route('/client', methods=['GET', 'POST'], STRICT_SLASHES=False)
+
+@app.route('/plumber', methods=['GET', 'POST'], strict_slashes=False)
+@login_required  # Ensure user is logged in before accessing the dashboard
+def plumber_dashboard():
+    """Renders the plumber dashboard template with a descriptive title."""
+    title = "Plumber Dashboard"  # Set a more appropriate title
+    return render_template('plumber.html', title=title)
+
+
+@app.route('/client', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def client_view():
     """ A function that renders the home page """
     return render_template('login.html', title='client')
 
 
-@app.route("/dashboard", STRICT_SLASHES=False)
+@app.route("/dashboard", strict_slashes=False)
 @login_required  # Require login for this route
 def dashboard():
     """Renders the dashboard only for authenticated users."""
     # Display dashboard content for logged-in user
     return render_template('client.html')
 
-@app.route('/profile/update', methods=['POST'], STRICT_SLASHES=False)
+@app.route('/profile/update', methods=['POST'], strict_slashes=False)
 def update_profile():
     service_areas = request.form.get('service_areas')
     bio = request.form.get('bio')
