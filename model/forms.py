@@ -55,13 +55,11 @@ def validate_phone(FlaskForm, field):
 
         # Extract the national significant number
         significant_number = national_significant_number(phone_no)
-
         # Prepend +234 country code
         phone_number_with_country_code = f'+234{significant_number}'
-
         # Update the field value with the formatted number
         field.data = phone_number_with_country_code
-        print(field.data)
+        # print(field.data)
         return field.data
 
     except (NumberParseException, ValueError):

@@ -91,11 +91,11 @@ class Client(BaseUser):
         
     def __str__(self):
         """ Returns the clients str """
-        return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone}', '{self.state}', completed_jobs={self.completed_jobs})"
+        return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone}', '{self.state}')"
     
     def __repr__(self):
         """ Returns the clients repr """
-        return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone}', '{self.state}', completed_jobs={self.completed_jobs})"
+        return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone}', '{self.state}')"
     
      
 # jobs_plumbers = Table('jobs_plumbers', metadata,
