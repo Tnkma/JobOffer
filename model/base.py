@@ -1,18 +1,17 @@
 #!/usr/bin/python3
 """Base models for other models"""
-
 from datetime import datetime
 from model import Base
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float, Table, MetaData
 from sqlalchemy.orm import relationship
 
-metadata = MetaData()
+# metadata = MetaData()
 
 
 class BaseUser(Base, UserMixin):
     """The Base User for clients and plumbers"""
-    __tablename__ = 'users'
+    # __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String(80), unique=True, nullable=False)
     email = Column(String(120), unique=True, nullable=False)
@@ -34,12 +33,14 @@ class BaseUser(Base, UserMixin):
 class Plumber(BaseUser):
     """ Plumber models from Baseuser """
     __tablename__ = 'plumbers'
-    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
     # jobs_assigned = relationship('Job', secondaryjoin='jobs_plumbers', backref='assigned_plumbers', lazy='dynamic')# many-to-many relationship
     bio = Column(Text, nullable=False)
     service_areas = Column(String(100), nullable=False)
-    completed_jobs = relationship('Job', backref='completed_plumber')
-    assigned_job_id = Column(Integer, ForeignKey('jobs.id'))
+    completed_jobs = relationship('Job', backref='completed_job')
+    # assigned_jobs = relationship('Job', backref='assigned_job')
+    message = relationship('Message', backref='plumber_message')
+    rank = relationship('Rank', backref='plumber_rank')
     
     def __init__(self, username, email, phone, state, bio, service_areas, password):
         super().__init__(username=username, email=email, phone=phone, state=state, password=password)
@@ -58,16 +59,17 @@ class Plumber(BaseUser):
 class Job(Base):
     __tablename__ = 'jobs'
     id = Column(Integer, primary_key=True)
-    client_id = Column(Integer, ForeignKey('clients.id'), nullable=False)
+    posted_by = Column(Integer, ForeignKey('clients.id'))
+    # clients_completed_jobs = Column(Integer, ForeignKey('clients.id'))
     job_title = Column(String(100), nullable=False)
-    assigned_job_id = Column(Integer, ForeignKey('jobs.id'))
+    # The plumber that completed the job
+    completed_by = Column(Integer, ForeignKey('plumbers.id'))
+    # assigned_to = Column(Integer, ForeignKey('plumbers.id'))
     content = Column(String(1000), nullable=False)
     date_posted = Column(DateTime, nullable=False, default=datetime.utcnow)
     location = Column(String(100), nullable=False)
-    # Define a one-to-many relationship with Message model
-    messages = relationship('Message', cascade='all, delete-orphan', backref='job_messages')
-    # Define a one-to-many relationship with Rank model
-    # assigned_plumber = relationship('Plumber', secondaryjoin=None, backref='applied_jobs',  foreign_keys=[assigned_job_id])
+    rank = relationship('Rank', backref='job_rank')
+    
     
     
     def __str__(self):
@@ -80,9 +82,11 @@ class Job(Base):
 class Client(BaseUser):
     """ Clients models inheriting from BaseUser """
     __tablename__ = 'clients'
-    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    jobs = relationship('Job', backref='client', lazy='dynamic')
-    completed_jobs = relationship('Job', backref='completed_client', lazy='dynamic')
+    id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
+    jobs = relationship('Job', backref='posted_job')
+    # completed_jobs = relationship('Job', backref='completed_job')
+    message = relationship('Message', backref='client_message')
+    rank = relationship('Rank', backref='client_rank')
     
     def __init__(self, username, email, phone, state, password):
         super().__init__(username=username, email=email, phone=phone, state=state, password=password)
@@ -109,8 +113,6 @@ class Message(Base):
     date_sent = Column(DateTime, nullable=False, default=datetime.utcnow)
     client_id = Column(Integer, ForeignKey('clients.id'))
     plumber_id = Column(Integer, ForeignKey('plumbers.id'))
-    job_id = Column(Integer, ForeignKey('jobs.id'), nullable=False)  # Foreign Key to Job table
-    job = relationship("Job", backref="job_messages")
     
     
     def __str__(self):

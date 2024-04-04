@@ -1,16 +1,10 @@
-from model import app, Base, bcrypt
-from model.forms import RegistrationForm, LoginForm
-from flask_login import current_user, login_required, login_user
+from model import app, Base, bcrypt, login_manager
+from model.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from flask_login import current_user, login_required, login_user, logout_user
 from flask import render_template, url_for, flash, redirect, request, session
 from model.base import Client, Plumber
-from flask_login import LoginManager
 from model.func import *
 
-
-
-# Initialize Flask-Login with your app
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 
 posts = [
@@ -47,6 +41,8 @@ def home():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     """ Register a new client """
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -55,6 +51,7 @@ def register():
         save()
         flash(f'Account created, You can now login', 'success')
         return redirect(url_for('login'))
+    
     flash(f'Account not created, Please fill the forms correctly!', 'danger')
     return render_template('register.html', title='Register', form=form)
 
@@ -62,13 +59,17 @@ def register():
 @app.route("/login", methods=['GET', 'POST'], strict_slashes=False)
 def login():
     """We create a object of the Login_Form class"""
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        
-        flash('You have been logged in!', 'success')
-        return redirect(url_for('client_view'))
-    else:
-        flash('Login Unsuccessful. Please check username and password', 'danger')    
+        user = Client.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check your email and password', 'danger')    
     return render_template('login.html', title='Login', form=form)
 
 
@@ -80,20 +81,14 @@ def plumber_dashboard():
     title = "Plumber Dashboard"  # Set a more appropriate title
     return render_template('plumber.html', title=title)
 
-
-@app.route('/client', methods=['GET', 'POST'], strict_slashes=False)
-@login_required
-def client_view():
-    """ A function that renders the home page """
-    return render_template('login.html', title='client')
-
-
-@app.route("/dashboard", strict_slashes=False)
-@login_required  # Require login for this route
+@app.route("/dashboard", strict_slashes=False) 
+# Require login for this route
 def dashboard():
     """Renders the dashboard only for authenticated users."""
-    # Display dashboard content for logged-in user
-    return render_template('client.html')
+    if current_user.is_authenticated:
+        return render_template('client.html')
+    flash(f'Please login to access the dashboard', 'danger')
+    return redirect(url_for('login'))
 
 @app.route('/profile/update', methods=['POST'], strict_slashes=False)
 def update_profile():
@@ -111,7 +106,25 @@ def update_profile():
 @app.route('/logout')
 def logout():
     """remove the username from the session if it's there"""
-    session.pop('username', None)
-    return redirect(url_for('/home'))
+    logout_user()
+    flash(f'You have been logged out!', 'success')
+    return redirect(url_for('home'))
+
+
+@app.route("/account", methods=['GET', 'POST'], strict_slashes=False)
+def account():
+    """ Update the account """
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        save()
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    return render_template('account.html', title='Account', form=form)
    
 

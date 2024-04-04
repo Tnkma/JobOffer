@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='register.css') }}">
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <form method="POST" action="" class="col-md-5">
+<div class="container vh-100 rounded-4 shadow-lg">
+    <form method="POST" action="" class="mx-auto">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group mt-3">
-            <legend class="border-bottom mb-2">Sign up today and be part of us</legend>
+        <fieldset class="form-group mt-4">
+            <legend class="border-bottom mb-4">Sign up today and be part of us</legend>
             <div class="form-group">
                 {{ form.username.label(class="form-control-label") }}
                 {% if form.username.errors %}
@@ -19,7 +19,7 @@
                     {{ form.username(class="form-control") }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 {{ form.email.label(class="form-control-label") }}
                 {% if form.email.errors %}
                     {{ form.email(class="form-control is-invalid") }}
@@ -29,10 +29,10 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.email(class="form-control form-control") }}
+                    {{ form.email(class="form-control") }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 {{ form.password.label(class="form-control-label") }}
                 {% if form.password.errors %}
                     {{ form.password(class="form-control is-invalid") }}
@@ -45,7 +45,7 @@
                     {{ form.password(class="form-control") }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 {{ form.confirm_password.label(class="form-control-label") }}
                 {% if form.confirm_password.errors %}
                     {{ form.confirm_password(class="form-control is-invalid") }}
@@ -58,7 +58,7 @@
                     {{ form.confirm_password(class="form-control") }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 {{ form.phone.label(class="form-control-label") }}
                 {% if form.phone.errors %}
                     {{ form.phone(class="form-control is-invalid") }}
@@ -71,7 +71,7 @@
                     {{ form.phone(class="form-control") }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 {{ form.state.label(class="form-control-label") }}
                 {% if form.state.errors %}
                     {{ form.state(class="form-control is-invalid") }}
@@ -87,8 +87,8 @@
         <div class="form-group">
             {{ form.submit(class="btn btn-primary btn-sm mt-3") }}
         </div>
-        <div class="border-top mt-2 pt-3 text-center">
-            <small class="text-muted mt-1">
+        <div class="border-top mt-2 pt-2 text-center">
+            <small class="text-muted">
                 Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
             </small>
         </div>

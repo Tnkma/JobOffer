@@ -24,3 +24,7 @@ def delete(obj):
     db.session.delete(obj)
     db.session.commit()
     
+def query_first(cls):
+    """ Query the first object """
+    return db.session.query(cls).first()
+    
