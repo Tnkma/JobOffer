@@ -34,11 +34,9 @@ class Plumber(BaseUser):
     """ Plumber models from Baseuser """
     __tablename__ = 'plumbers'
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
-    # jobs_assigned = relationship('Job', secondaryjoin='jobs_plumbers', backref='assigned_plumbers', lazy='dynamic')# many-to-many relationship
     bio = Column(Text, nullable=False)
     service_areas = Column(String(100), nullable=False)
     completed_jobs = relationship('Job', backref='completed_job')
-    # assigned_jobs = relationship('Job', backref='assigned_job')
     message = relationship('Message', backref='plumber_message')
     rank = relationship('Rank', backref='plumber_rank')
     

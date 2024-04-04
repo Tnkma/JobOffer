@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     {% for post in posts %}
         <article class="media content-section">
           <div class="media-body">

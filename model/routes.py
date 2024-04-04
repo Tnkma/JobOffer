@@ -52,7 +52,7 @@ def register():
         flash(f'Account created, You can now login', 'success')
         return redirect(url_for('login'))
     
-    flash(f'Account not created, Please fill the forms correctly!', 'danger')
+    # flash(f'Account not created, Please fill the forms correctly!', 'danger')
     return render_template('register.html', title='Register', form=form)
 
 
@@ -107,14 +107,13 @@ def update_profile():
 def logout():
     """remove the username from the session if it's there"""
     logout_user()
-    flash(f'You have been logged out!', 'success')
+    flash(f'You have been logged out!', 'warning')
     return redirect(url_for('home'))
 
 
-@app.route("/account", methods=['GET', 'POST'], strict_slashes=False)
+@app.route("/account", methods=['GET','POST'], strict_slashes=False)
 def account():
     """ Update the account """
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     form = UpdateAccountForm()
     if form.validate_on_submit():
         current_user.username = form.username.data
@@ -125,6 +124,6 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    return render_template('account.html', title='Account', form=form)
-   
-
+        form.phone.data = current_user.phone
+        form.state.data = current_user.state
+    return render_template('profile.html', title='Account', form=form)
