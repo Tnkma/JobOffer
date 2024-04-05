@@ -1,18 +1,24 @@
-{% extends 'layout.html' %}
-{% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    <div class="content-section">
-        <div class="media">
+    <style>
+        .profile {
+            margin-top: 0px;
+            margin-bottom: 100px;
+            justify-items: center;
+            margin-left: 400px;
+        }
+
+    </style>
+    <div class="content-section mr-2">
+        <div class="media mr-2">
             <img class="rounded-circle account-img" src="user_image.jpg" alt="">
             <div class="media-body">
                 <h2 class="account-heading">{{ current_user.username}}</h2>
                 <p class="text-secondary">{{ current_user.email }}</p>
             </div>
         </div>
-            <div class="container w-50">
+            <div class="profile w-50">
                 <form method="POST" action="" class="mx-auto">
                     {{ form.hidden_tag() }}
-                    <fieldset class="form-group mt-4">
+                    <fieldset class="form-group mt-3">
                         <legend class="border-bottom mb-4">Account Information</legend>
                         <div class="form-group">
                             {{ form.username.label(class="form-control-label") }}
@@ -55,4 +61,3 @@
             </form>
         </div>
     </div>
-{% endblock %}

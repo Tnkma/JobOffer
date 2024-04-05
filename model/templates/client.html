@@ -1,11 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plum.css') }}">
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="container" method="POST" action="">
-  <div class="row">
-    <div class="bg-secondary col-md-3 vh-100">
-      <div class="p-4">
+    <div class="sidebar bg-secondary">
         <ul class="nav flex-column">
           <li class="nav-item py-2 py-sm-0 mask">
             <a href="#" class="nav-link text-white">
@@ -44,14 +42,38 @@
             </a>
           </li>
           <li class="nav-item py-2 py-sm-0 mask">
-            <a href="{{ url_for('account') }}" class="nav-link text-white">
+            <a href="#" class="nav-link" data-url="{{ url_for('account') }}">
                 <i class="fs-5 fas fa-user"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Account</span>
             </a>
           </li> 
         </ul>
       </div>
+  <!-- conent section -->
+    <div class="content" id="content">
+       <!-- Content will be dynamically loaded here -->
     </div>
   </div>
-</div>
+  <!-- end of content section -->
+  <script>
+    $(document).ready(function() {
+      // handle the click event
+      $(".nav-link").click(function(event){
+        event.preventDefault();
+        var url = $(this).data('url');
+        // make a ajax request to flask
+        $.ajax ({
+          url: url,
+          type: 'GET',
+          success: function(response) {
+            // replace the .content area with the data returned
+            $("#content").html(response);
+          },
+          error: function(error) {
+            console.log("Error fetching data", error);
+          }
+        });
+      });
+    });
+  </script>
 {% endblock %}
