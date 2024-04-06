@@ -16,7 +16,7 @@ def load_user(user_id):
 @app.route("/home")
 def home():
     """ Renders the homepage to everyone """
-    jobs=Job.query.all()
+    jobs = Job.query.all()
     return render_template('home.html', jobs=jobs)
 
 
@@ -127,6 +127,6 @@ def post_new_job():
 def job(job_id):
     """ Renders the job details """
     job = Job.query.get_or_404(job_id)
-    return render_template('job.html', title=job.title, job=job)
+    return render_template('job.html', title=job.job_title, job=job)
         
     

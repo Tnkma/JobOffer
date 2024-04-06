@@ -1,15 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    <article class="media content-section">
-        <div class="media-body">
-        <div class="article-metadata">
-            <a class="mr-2" href="#">{{ job.posted_by.username }}</a>
-            <small class="text-muted">{{ job.date_posted.strftime('%Y-%m-%d') }}</small>
+<article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <p><strong>Posted By: </strong><a class="mr-2" href="#">{{ job.posted_by.username }}</a></p>
+        <small class="text-muted"><strong>Date: </strong>{{ job.date_posted.strftime('%Y-%m-%d') }}</small>
+        <div class="mt-2">
+          <small class="text-muted"><strong>Location: {{ job.location }} State.</strong></small>
         </div>
-        <h2 class="article-title">{{ job.job_title | upper }}</h2>
-        <p class="article-content">{{ job.job_description }}</p>
-        <p class="article-content">{{ job.content }}</p>
-        </div>
-    </article>
+      </div>
+      <h2 class="article-title">{{ job.job_title }}</h2>
+      <p class="article-content">{{ job.job_description }}</p>
+      <p class="article-content">{{ job.content }}</p>
+    </div>
+  </article>
 {% endblock content %}

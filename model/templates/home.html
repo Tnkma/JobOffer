@@ -5,12 +5,15 @@
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ job.posted_by.username }}</a>
-              <small class="text-muted">{{ job.date_posted.strftime('%Y-%m-%d') }}</small>
+              <p><strong>Posted By: </strong><a class="mr-2" href="#">{{ job.posted_by.username }}</a></p>
+              <small class="text-muted"><strong>Date: </strong>{{ job.date_posted.strftime('%Y-%m-%d') }}</small>
+              <div class="mt-2">
+                <small class="text-muted"><strong>Location: {{ job.location }} State.</strong></small>
+              </div>
             </div>
-            <h2><a class="article-title" href="{{ url_for('job', job_id=job.id) }}">{{ job.job_title | upper }}</a></h2>
+            <h2><a class="article-title" href="{{ url_for('job', job_id=job.id) }}">{{ job.job_title }}</a></h2>
             <p class="article-content">{{ job.job_description }}</p>
-            <p class="article-content">{{ job.content }}</p>
+            <p class="article-content">{{ job.content }}</p>   
           </div>
         </article>
     {% endfor %}

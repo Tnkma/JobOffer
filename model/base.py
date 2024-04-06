@@ -36,7 +36,7 @@ class Plumber(BaseUser):
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
     bio = Column(Text, nullable=False)
     service_areas = Column(String(100), nullable=False)
-    completed_jobs = relationship('Job', backref='completed_job')
+    completed_jobs = relationship('Job', backref='posted_by_client', foreign_keys="[Job.completed_by_id]")
     message = relationship('Message', backref='plumber_message')
     rank = relationship('Rank', backref='plumber_rank')
     
@@ -59,7 +59,6 @@ class Job(Base):
     id = Column(Integer, primary_key=True)
     posted_by_id = Column(Integer, ForeignKey('clients.id', name='fk_jobs_posted_by'))
     posted_by = relationship("Client", foreign_keys=[posted_by_id])
-    # clients_completed_jobs = Column(Integer, ForeignKey('clients.id'))
     job_title = Column(String(100), nullable=False)
     job_description = Column(String(500), nullable=False)
     # The plumber that completed the job
@@ -85,7 +84,7 @@ class Client(BaseUser):
     """ Clients models inheriting from BaseUser """
     __tablename__ = 'clients'
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
-    jobs = relationship('Job', backref='posted_by_client', foreign_keys="[Job.posted_by_id]")
+    jobs = relationship('Job', backref='created_by_client', foreign_keys="[Job.posted_by_id]")
     # completed_jobs = relationship('Job', backref='completed_job')
     message = relationship('Message', backref='client_message')
     rank = relationship('Rank', backref='client_rank')
@@ -143,8 +142,8 @@ class Rank(Base):
         return f"Ranking('{self.rating}', '{self.client_id}', '{self.plumber_id}')"
     
     
-    class Application(Base):
-        """ Model for job applications """
-        __tablename__ = 'applications'
-        user_id = Column(Integer, ForeignKey('plumbers.id'), primary_key=True)
-        job_id = Column(Integer, ForeignKey('job.id'), primary_key=True)
+class Application(Base):
+    """ Model for job applications """
+    __tablename__ = 'applications'
+    user_id = Column(Integer, ForeignKey('plumbers.id'), primary_key=True)
+    job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
