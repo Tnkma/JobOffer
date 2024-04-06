@@ -8,7 +8,7 @@
               <a class="mr-2" href="#">{{ job.posted_by.username }}</a>
               <small class="text-muted">{{ job.date_posted.strftime('%Y-%m-%d') }}</small>
             </div>
-            <h2><a class="article-title" href="#">{{ job.job_title | upper }}</a></h2>
+            <h2><a class="article-title" href="{{ url_for('job', job_id=job.id) }}">{{ job.job_title | upper }}</a></h2>
             <p class="article-content">{{ job.job_description }}</p>
             <p class="article-content">{{ job.content }}</p>
           </div>

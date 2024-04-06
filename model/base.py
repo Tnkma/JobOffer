@@ -63,14 +63,16 @@ class Job(Base):
     job_title = Column(String(100), nullable=False)
     job_description = Column(String(500), nullable=False)
     # The plumber that completed the job
-    completed_by = Column(Integer, ForeignKey('plumbers.id'))
+    completed_by_id = Column(Integer, ForeignKey('plumbers.id', name='fk_jobs_completed_by'))
+    completed_by = relationship('Plumber', foreign_keys=[completed_by_id])
+    
     # assigned_to = Column(Integer, ForeignKey('plumbers.id'))
     content = Column(String(1000), nullable=False)
     date_posted = Column(DateTime, nullable=False, default=datetime.utcnow)
     location = Column(String(100), nullable=False)
     rank = relationship('Rank', backref='job_rank')
-    
-    
+    applicants = relationship('Plumber', secondary='applications', backref='jobs_applied')
+
     
     def __str__(self):
         return f"Job('{self.job_title}', '{self.date_posted}', '{self.posted_by}', '{self.content}', '{self.location}'), '{self.completed_by}', '{self.job_description}'"
@@ -139,3 +141,10 @@ class Rank(Base):
     def __str__(self):
         """Returns the string representation of Ranking"""
         return f"Ranking('{self.rating}', '{self.client_id}', '{self.plumber_id}')"
+    
+    
+    class Application(Base):
+        """ Model for job applications """
+        __tablename__ = 'applications'
+        user_id = Column(Integer, ForeignKey('plumbers.id'), primary_key=True)
+        job_id = Column(Integer, ForeignKey('job.id'), primary_key=True)

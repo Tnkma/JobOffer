@@ -64,7 +64,6 @@ def plumber_dashboard():
     return render_template('plumber.html', title=title)
 
 @app.route("/dashboard", strict_slashes=False) 
-# Require login for this route
 def dashboard():
     """Renders the dashboard only for authenticated users."""
     if current_user.is_authenticated:
@@ -122,5 +121,12 @@ def post_new_job():
         flash(f'Job posted successfully!', 'success')
         return redirect(url_for('home'))
     return render_template('post_job.html', title='Post Job', form=form)
+
+
+@app.route("/jobs/<int:job_id>", strict_slashes=False)
+def job(job_id):
+    """ Renders the job details """
+    job = Job.query.get_or_404(job_id)
+    return render_template('job.html', title=job.title, job=job)
         
     
