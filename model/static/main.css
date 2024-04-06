@@ -9,16 +9,15 @@
 }
 
 .footer {
-  background-color: white; 
-  height: 60px; 
+  position: sticky; /* Position the footer relative to the browser window */
+  bottom: 0; /* Place the footer at the bottom of the window */
+  background-color: white;
   width: 100%;
-  border-top: 1px solid #CCCCCC;  
-  display:flex; 
-  flex-direction: column; 
-  justify-content: center; 
+  border-top: 1px solid #CCCCCC;
+  margin-bottom: 0px;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  bottom: 0;
-  
 }
 
 

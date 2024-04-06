@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+{% block content %}
+<style>
+    .content-section {
+        background: #ffffff;
+        padding: 10px 20px;
+        border: 1px solid #dddddd;
+        border-radius: 3px;
+        margin-bottom: 5px;
+      }
+</style>
+    <div class="content-section">
+        <form method="POST" action="" class="mx-auto">
+        {{ form.hidden_tag() }}
+            <legend class="border-bottom mb-3">Post Your Job Here</legend>
+            <div class="form-group">
+                {{ form.job_title.label(class="form-control-label") }}
+                {% if form.job_title.errors %}
+                {{ form.job_title(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.job_title.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                {{ form.job_title(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group mt-4 mt-3">
+                {{ form.job_description.label(class="form-control-label") }}
+                {% if form.job_description.errors %}
+                    {{ form.job_description(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.job_description.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.job_description(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group mt-3">
+                {{ form.content.label(class="form-control-label") }}
+                {% if form.content.errors %}
+                    {{ form.content(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.content.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.content(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group mt-3">
+                {{ form.state.label(class="form-control-label") }}
+                {% if form.state.errors %}
+                    {{ form.state(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.state.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.state(class="form-control") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary btn-sm mt-3") }}
+        </div>
+        </form>
+    </div>
+{% endblock %}

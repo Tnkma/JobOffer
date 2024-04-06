@@ -1,8 +1,8 @@
-"""fixing foreign keys
+"""Initial migration
 
-Revision ID: cfa293cfd733
+Revision ID: 92c4d6f870e4
 Revises: 
-Create Date: 2024-04-03 13:27:17.324624
+Create Date: 2024-04-06 06:22:51.319999
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cfa293cfd733'
+revision = '92c4d6f870e4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,14 +46,15 @@ def upgrade():
     )
     op.create_table('jobs',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('posted_by', sa.Integer(), nullable=True),
+    sa.Column('posted_by_id', sa.Integer(), nullable=True),
     sa.Column('job_title', sa.String(length=100), nullable=False),
+    sa.Column('job_description', sa.String(length=500), nullable=False),
     sa.Column('completed_by', sa.Integer(), nullable=True),
     sa.Column('content', sa.String(length=1000), nullable=False),
     sa.Column('date_posted', sa.DateTime(), nullable=False),
     sa.Column('location', sa.String(length=100), nullable=False),
     sa.ForeignKeyConstraint(['completed_by'], ['plumbers.id'], ),
-    sa.ForeignKeyConstraint(['posted_by'], ['clients.id'], ),
+    sa.ForeignKeyConstraint(['posted_by_id'], ['clients.id'], name='fk_jobs_posted_by'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('message',

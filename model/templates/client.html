@@ -5,75 +5,78 @@
 <div class="container" method="POST" action="">
     <div class="sidebar bg-secondary">
         <ul class="nav flex-column">
-          <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
-                <i class="fs-5 fas fa-tachometer-alt"></i>
+          <li class="nav-item">
+            <a href="#" class="sidebar-link text-white">
+                <i class="fs-6 fas fa-tachometer-alt"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
-            <a href="{{ url_for('home') }}" class="nav-link text-white">
-                <i class="fs-5 fas fa-home"></i>
+          <li class="nav-item">
+            <a href="{{ url_for('home') }}">
+                <i class="fs-6 fas fa-home"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Home</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
-                <i class="fs-5 fas fa-briefcase"></i>
+          <li class="nav-item">
+            <a href="#" class="sidebar-link text-white">
+                <i class="fs-6 fas fa-briefcase"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Posted Jobs</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
-                <i class="fs-5 fas fa-history"></i>
+          <li class="nav-item">
+            <a href="#" class="sidebar-link text-white">
+                <i class="fs-6 fas fa-history"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Previous jobs</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
-                <i class="fs-5 fas fa-envelope"></i>
+          <li class="nav-item">
+            <a href="#" class="sidebar-link text-white">
+                <i class="fs-6 fas fa-envelope"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Messages</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
-                <i class="fs-5 fas fa-wrench"></i>
+          <li class="nav-item">
+            <a href="#" class="sidebar-link text-white">
+                <i class="fs-6 fas fa-wrench"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Get A Plumber</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link" data-url="{{ url_for('account') }}">
-                <i class="fs-5 fas fa-user"></i>
+          <li class="nav-item">
+            <a href="#" class="sidebar-link" data-url="{{ url_for('account') }}">
+                <i class="fs-6 fas fa-user"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Account</span>
             </a>
           </li> 
         </ul>
       </div>
   <!-- conent section -->
-    <div class="content" id="content">
+    <div class="sidebar-content" id="sidebar-content">
        <!-- Content will be dynamically loaded here -->
     </div>
   </div>
   <!-- end of content section -->
   <script>
     $(document).ready(function() {
-      // handle the click event
-      $(".nav-link").click(function(event){
-        event.preventDefault();
-        var url = $(this).data('url');
-        // make a ajax request to flask
-        $.ajax ({
-          url: url,
-          type: 'GET',
-          success: function(response) {
-            // replace the .content area with the data returned
-            $("#content").html(response);
-          },
-          error: function(error) {
-            console.log("Error fetching data", error);
-          }
-        });
+      // Handle click events on sidebar links
+      $(".sidebar-link").click(function(event) {
+          event.preventDefault();  // Prevent default link behavior
+          
+          // Get the URL from the data-url attribute
+          var url = $(this).data('url');
+          
+          // Make an AJAX request to the Flask route
+          $.ajax({
+              url: url,
+              type: 'GET',
+              success: function(response) {
+                  // Replace the content area with the fetched content
+                  $("#sidebar-content").html(response);
+              },
+              error: function(xhr, status, error) {
+                  console.error("Error fetching content:", error);
+              }
+          });
       });
-    });
+  });  
   </script>
 {% endblock %}

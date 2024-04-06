@@ -1,5 +1,5 @@
 # from flask_wtf import FlaskForm
-from wtforms import Form, StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import Form, StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from phonenumbers import parse, is_valid_number, national_significant_number, NumberParseException
 from flask_wtf import FlaskForm
@@ -113,3 +113,10 @@ class UpdateAccountForm(FlaskForm):
             email = Client.query.filter_by(email=email.data).first()
             if email:
                 raise ValidationError('This email already exist. Please choose a different one.')
+            
+class PostJobForm(FlaskForm):
+    job_title = StringField('Job Title', validators=[DataRequired()])
+    job_description = StringField('Job Description', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    state = SelectField('State', choices=STATE_CHOICE)
+    submit = SubmitField('Post Job')

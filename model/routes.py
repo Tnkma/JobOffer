@@ -1,28 +1,9 @@
 from model import app, Base, bcrypt, login_manager
-from model.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from model.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostJobForm
 from flask_login import current_user, login_required, login_user, logout_user
 from flask import render_template, url_for, flash, redirect, request, session
-from model.base import Client, Plumber
+from model.base import Client, Plumber, Job
 from model.func import *
-
-
-
-posts = [
-    {
-        'author': 'Corey Schafer',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'April 20, 2018'
-    },
-    {
-        'author': 'Jane Doe',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'April 21, 2018'
-    }
-]
-
-
 
 
 @login_manager.user_loader
@@ -31,11 +12,12 @@ def load_user(user_id):
     return get_single(Client, id=user_id)
 
 
-@app.route("/")
+@app.route("/jobs")
 @app.route("/home")
 def home():
     """ Renders the homepage to everyone """
-    return render_template('home.html', posts=posts)
+    jobs=Job.query.all()
+    return render_template('home.html', jobs=jobs)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -127,3 +109,18 @@ def account():
         form.phone.data = current_user.phone
         form.state.data = current_user.state
     return render_template('profile.html', title='Account', form=form)
+
+@app.route("/jobs/new", methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def post_new_job():
+    """ Posts new job"""
+    form = PostJobForm()
+    if form.validate_on_submit():
+        job  = Job(job_title=form.job_title.data, content=form.content.data, location=form.state.data, job_description=form.job_description.data, posted_by_id=current_user.id)
+        db.session.add(job)
+        db.session.commit()
+        flash(f'Job posted successfully!', 'success')
+        return redirect(url_for('home'))
+    return render_template('post_job.html', title='Post Job', form=form)
+        
+    
