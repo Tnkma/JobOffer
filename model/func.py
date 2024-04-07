@@ -11,9 +11,9 @@ def save():
     """ Save the current session """
     db.session.commit()
     
-def get_single(model, **kwargs):
-    """ Get a single object from the database """
-    return db.session.query(model).filter_by(**kwargs).first()
+#def get_single(model, **kwargs):
+    #""" Get a single object from the database """
+    #return db.session.query(model).filter_by(**kwargs).first()
 
 def get_all(model):
     """ Get all objects from the database """

@@ -94,3 +94,8 @@ a.article-title:hover {
 .account-heading {
   font-size: 2.5rem;
 }
+
+.btn {
+  text-align: right; /* Aligns content to the right */
+}
+

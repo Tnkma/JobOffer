@@ -9,7 +9,9 @@ from model.func import *
 @login_manager.user_loader
 def load_user(user_id):
     # Assuming Client objects have a primary key 'id'
-    return get_single(Client, id=user_id)
+    #return get_single(Client, id=user_id)
+    client = Client.query.get(int(user_id))
+    return client
 
 
 @app.route("/jobs")
@@ -97,8 +99,11 @@ def account():
     """ Update the account """
     form = UpdateAccountForm()
     if form.validate_on_submit():
+        print('not here')
+        print(form.username.data, form.email.data, form.phone.data, form.state.data)
         current_user.username = form.username.data
         current_user.email = form.email.data
+        current_user.phone = form.phone.data
         save()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('account'))
@@ -107,7 +112,7 @@ def account():
         form.email.data = current_user.email
         form.phone.data = current_user.phone
         form.state.data = current_user.state
-    return render_template('profile.html', title='Account', form=form)
+    return render_template('second_profile.html', title='Account', form=form)
 
 @app.route("/jobs/new", methods=['GET', 'POST'], strict_slashes=False)
 @login_required
@@ -115,7 +120,7 @@ def post_new_job():
     """ Posts new job"""
     form = PostJobForm()
     if form.validate_on_submit():
-        job  = Job(job_title=form.job_title.data, content=form.content.data, location=form.state.data, job_description=form.job_description.data, posted_by_id=current_user.id)
+        job  = Job(job_title=form.job_title.data, content=form.content.data, location=form.state.data, job_description=form.job_description.data, client_id=current_user.id)
         db.session.add(job)
         db.session.commit()
         flash(f'Job posted successfully!', 'success')

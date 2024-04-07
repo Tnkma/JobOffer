@@ -120,3 +120,11 @@ class PostJobForm(FlaskForm):
     content = TextAreaField('Content', validators=[DataRequired()])
     state = SelectField('State', choices=STATE_CHOICE)
     submit = SubmitField('Post Job')
+    
+class RankForm(FlaskForm):
+    rank = SelectField('Rank', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')])
+    submit = SubmitField('Rank')
+    
+class ApplyForm(FlaskForm):
+    
+    submit = SubmitField('Apply')

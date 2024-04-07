@@ -18,7 +18,7 @@ class BaseUser(Base, UserMixin):
     image_file = Column(String(20), nullable=False, default='default.jpg')
     password = Column(String(60), nullable=False)
     date_joined = Column(DateTime, nullable=False, default=datetime.utcnow)
-    phone = Column(Integer, unique=True, nullable=False)
+    phone = Column(String(14), unique=True, nullable=False)
     state = Column(String(20), nullable=False)
     
     def __repr__(self):
@@ -36,7 +36,9 @@ class Plumber(BaseUser):
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
     bio = Column(Text, nullable=False)
     service_areas = Column(String(100), nullable=False)
-    completed_jobs = relationship('Job', backref='posted_by_client', foreign_keys="[Job.completed_by_id]")
+    
+    completed_jobs = relationship('Job', backref="plumbers")
+    
     message = relationship('Message', backref='plumber_message')
     rank = relationship('Rank', backref='plumber_rank')
     
@@ -57,34 +59,33 @@ class Plumber(BaseUser):
 class Job(Base):
     __tablename__ = 'jobs'
     id = Column(Integer, primary_key=True)
-    posted_by_id = Column(Integer, ForeignKey('clients.id', name='fk_jobs_posted_by'))
-    posted_by = relationship("Client", foreign_keys=[posted_by_id])
+    
+    client_id = Column(Integer, ForeignKey('clients.id'))
+    
     job_title = Column(String(100), nullable=False)
     job_description = Column(String(500), nullable=False)
-    # The plumber that completed the job
-    completed_by_id = Column(Integer, ForeignKey('plumbers.id', name='fk_jobs_completed_by'))
-    completed_by = relationship('Plumber', foreign_keys=[completed_by_id])
     
-    # assigned_to = Column(Integer, ForeignKey('plumbers.id'))
+    plumber_id = Column(Integer, ForeignKey('plumbers.id'))
+    
     content = Column(String(1000), nullable=False)
     date_posted = Column(DateTime, nullable=False, default=datetime.utcnow)
     location = Column(String(100), nullable=False)
     rank = relationship('Rank', backref='job_rank')
-    applicants = relationship('Plumber', secondary='applications', backref='jobs_applied')
+    # applicants = relationship('Plumber', secondary='applications', backref='jobs_applied')
 
     
     def __str__(self):
-        return f"Job('{self.job_title}', '{self.date_posted}', '{self.posted_by}', '{self.content}', '{self.location}'), '{self.completed_by}', '{self.job_description}'"
+        return f"Job('{self.job_title}', '{self.date_posted}', '{self.client_id}', '{self.content}', '{self.location}'), '{self.plumber_id}', '{self.job_description}'"
     
     
     def __repr__(self):
-        return f"Job('{self.job_title}', '{self.date_posted}', '{self.posted_by}', '{self.content}', '{self.location}'), '{self.completed_by}', '{self.job_description}'"
+        return f"Job('{self.job_title}', '{self.date_posted}', '{self.client_id}', '{self.content}', '{self.location}'), '{self.plumber_id}', '{self.job_description}'"
         
 class Client(BaseUser):
     """ Clients models inheriting from BaseUser """
     __tablename__ = 'clients'
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
-    jobs = relationship('Job', backref='created_by_client', foreign_keys="[Job.posted_by_id]")
+    jobs = relationship('Job', backref="clients")
     # completed_jobs = relationship('Job', backref='completed_job')
     message = relationship('Message', backref='client_message')
     rank = relationship('Rank', backref='client_rank')
@@ -142,8 +143,8 @@ class Rank(Base):
         return f"Ranking('{self.rating}', '{self.client_id}', '{self.plumber_id}')"
     
     
-class Application(Base):
-    """ Model for job applications """
-    __tablename__ = 'applications'
-    user_id = Column(Integer, ForeignKey('plumbers.id'), primary_key=True)
-    job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
+#class Application(Base):
+    #""" Model for job applications """
+    #__tablename__ = 'applications'
+   # user_id = Column(Integer, ForeignKey('plumbers.id'), primary_key=True)
+    #job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
