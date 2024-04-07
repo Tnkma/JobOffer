@@ -1,10 +1,12 @@
-# from flask_wtf import FlaskForm
-from wtforms import Form, StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
+
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from phonenumbers import parse, is_valid_number, national_significant_number, NumberParseException
 from flask_wtf import FlaskForm
-from model.base import Client
+from model.base import Plumber
 from flask_login import current_user
+
+
 
 STATE_CHOICE = [
     ('Abia', 'Abia'),
@@ -80,14 +82,14 @@ class RegistrationForm(FlaskForm):
     
     def validate_email(self, email):
         """ Validates the username """
-        email = Client.query.filter_by(email=email.data).first()
+        email = Plumber.query.filter_by(email=email.data).first()
         if email:
             raise ValidationError('This email already exist. Please choose a different one.')
         
         
     def validate_phone(self, phone):
         """ Validates the username """
-        phone = Client.query.filter_by(phone=phone.data).first()
+        phone = Plumber.query.filter_by(phone=phone.data).first()
         if phone:
             raise ValidationError('This phone number already exist. Please choose a different one.')
 
@@ -110,21 +112,6 @@ class UpdateAccountForm(FlaskForm):
     def validate_email(self, email):
         """ Validates the username """
         if email.data != current_user.email:
-            email = Client.query.filter_by(email=email.data).first()
+            email = Plumber.query.filter_by(email=email.data).first()
             if email:
                 raise ValidationError('This email already exist. Please choose a different one.')
-            
-class PostJobForm(FlaskForm):
-    job_title = StringField('Job Title', validators=[DataRequired()])
-    job_description = StringField('Job Description', validators=[DataRequired()])
-    content = TextAreaField('Content', validators=[DataRequired()])
-    state = SelectField('State', choices=STATE_CHOICE)
-    submit = SubmitField('Post Job')
-    
-class RankForm(FlaskForm):
-    rank = SelectField('Rank', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')])
-    submit = SubmitField('Rank')
-    
-class ApplyForm(FlaskForm):
-    
-    submit = SubmitField('Apply')
