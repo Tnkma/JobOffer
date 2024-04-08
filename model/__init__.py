@@ -21,13 +21,10 @@ bcrypt = Bcrypt(app)
 
 # initialize the login manager
 login_manager = LoginManager(app)
-login_manager.login_view = 'plum.login'
+login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
-# initialize the login manager
-login_manager = LoginManager(app)
-login_manager.login_view = 'client_s.login'
-login_manager.login_message_category = 'info'
+
 
 from model.plumbers.routes import plums
 from model.clients.routes import client_s

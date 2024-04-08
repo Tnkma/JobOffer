@@ -34,25 +34,23 @@ class Plumber(BaseUser):
     """ Plumber models from Baseuser """
     __tablename__ = 'plumbers'
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
-    bio = Column(Text, nullable=False)
-    service_areas = Column(String(100), nullable=False)
+    # bio = Column(Text, nullable=True)
+    # service_areas = Column(String(100), nullable=True)
     
     completed_jobs = relationship('Job', backref="plumbers")
     
     message = relationship('Message', backref='plumber_message')
     rank = relationship('Rank', backref='plumber_rank')
     
-    def __init__(self, username, email, phone, state, bio, service_areas, password):
+    def __init__(self, username, email, phone, state, password):
         super().__init__(username=username, email=email, phone=phone, state=state, password=password)
-        self.bio = bio
-        self.service_areas = service_areas
         
     def __str__(self):
-        return f"Plumber('{self.username}', '{self.email}', '{self.service_areas}', '{self.phone}', '{self.service_areas}', '{self.state}', '{self.bio}', '{self.image_file}', completed_jobs={self.completed_jobs})"
+        return f"Plumber('{self.username}', '{self.email}', '{self.phone}', '{self.state}', '{self.image_file}'"
 
     
     def __repr__(self):
-        return f"Plumber('{self.username}', '{self.email}', '{self.service_areas}', '{self.phone}', '{self.service_areas}', '{self.state}', '{self.bio}', '{self.image_file}', completed_jobs={self.completed_jobs})"
+        return f"Plumber('{self.username}', '{self.email}', '{self.phone}', '{self.state}', '{self.image_file}'"
 
     
     

@@ -11,10 +11,16 @@
                 <small class="text-muted"><strong>Location: {{ job.location }} State.</strong></small>
               </div>
             </div>
-            <h2><a class="article-title" href="{{ url_for('job', job_id=job.id) }}">{{ job.job_title }}</a></h2>
+            <h2><a class="article-title" href="{{ url_for('job_route.job', job_id=job.id) }}">{{ job.job_title }}</a></h2>
             <p class="article-content">{{ job.job_description }}</p>
             <p class="article-content">{{ job.content }}</p>   
           </div>
         </article>
     {% endfor %}
+        <div class="btn">
+          <a class="btn btn-primary" href="{{ url_for('plums.register') }}">signup as a plumber</a>
+        </div>
+        <div class="btn">
+          <a class="btn btn-primary" href="{{ url_for('registers') }}">signup as a client</a>
+        </div>
 {% endblock content %}

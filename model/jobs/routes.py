@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 from flask_login import current_user, login_required
-from flask import render_template, flash, redirect, Blueprint
+from flask import render_template, flash, redirect, Blueprint, url_for
 from model.base import Job
 from .utils import new, save
 from .form import PostJobForm
 
-job_route = Blueprint('job_route', __name__)
+job_route = Blueprint('job_route', __name__, template_folder='templates', static_folder='static')
 
 @job_route.route("/jobs/new", methods=['GET', 'POST'], strict_slashes=False)
 @login_required
@@ -17,7 +17,7 @@ def post_new_job():
         new(job)
         save()
         flash(f'Job posted successfully!', 'success')
-        return redirect(job_route.url_for('home'))
+        return redirect(url_for('main.home'))
     return render_template('post_job.html', title='Post Job', form=form)
 
 

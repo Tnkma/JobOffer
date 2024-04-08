@@ -18,4 +18,4 @@ def logout():
     """remove the username from the session if it's there"""
     logout_user()
     flash(f'You have been logged out!', 'warning')
-    return redirect(main.url_for('home'))
+    return redirect(url_for('main.home'))

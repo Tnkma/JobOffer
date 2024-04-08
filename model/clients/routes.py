@@ -3,11 +3,11 @@
 from model import app, bcrypt, login_manager
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm
 from flask_login import current_user, login_user
-from flask import render_template, flash, redirect, request, Blueprint
+from flask import render_template, flash, redirect, request, Blueprint, url_for
 from model.base import Client
 from .utils import *
 
-client_s = Blueprint('client_s', __name__)
+client_s = Blueprint('client_s', __name__, template_folder='templates', static_folder='static')
 
 
 
@@ -21,11 +21,11 @@ def load_user(user_id):
 
 
 
-@client_s.route("/register", methods=['GET', 'POST'])
-def register():
+@app.route("/register", methods=['GET', 'POST'])
+def registers():
     """ Register a new client """
     if current_user.is_authenticated:
-        return redirect(client_s.url_for('home'))
+        return redirect(url_for('main.home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -33,30 +33,29 @@ def register():
         new(client)
         save()
         flash(f'Account created, You can now login', 'success')
-        return redirect(client_s.url_for('login'))
-    
+        return redirect(url_for('login'))
     # flash(f'Account not created, Please fill the forms correctly!', 'danger')
-    return render_template('register.html', title='Register', form=form)
+    return render_template('registers.html', title='Register', form=form)
 
 
-@client_s.route("/login", methods=['GET', 'POST'], strict_slashes=False)
+@app.route("/login", methods=['GET', 'POST'], strict_slashes=False)
 def login():
     """We create a object of the Login_Form class"""
     if current_user.is_authenticated:
-        return redirect(client_s.url_for('home'))
+        return redirect(url_for('main.home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = Client.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
             flash('You have been logged in!', 'success')
-            return redirect(client_s.url_for('home'))
+            return redirect(url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check your email and password', 'danger')    
     return render_template('login.html', title='Login', form=form)
 
 
-@client_s.route("/account", methods=['GET','POST'], strict_slashes=False)
+@app.route("/account", methods=['GET','POST'], strict_slashes=False)
 def account():
     """ Update the account """
     form = UpdateAccountForm()
@@ -66,7 +65,7 @@ def account():
         current_user.phone = form.phone.data
         save()
         flash('Your account has been updated!', 'success')
-        return redirect(client_s.url_for('account'))
+        return redirect(url_for('client_s.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
@@ -75,10 +74,10 @@ def account():
     return render_template('second_profile.html', title='Account', form=form)
 
 
-@client_s.route("/dashboard", strict_slashes=False) 
+@app.route("/dashboard", strict_slashes=False) 
 def dashboard():
     """Renders the dashboard only for authenticated users."""
     if current_user.is_authenticated:
         return render_template('client.html')
     flash(f'Please login to access the dashboard', 'danger')
-    return redirect(client_s.url_for('login'))
+    return redirect(url_for('login'))

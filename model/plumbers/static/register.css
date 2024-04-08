@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: comfortaa, sans-serif;
+    box-sizing: border-box;
+}
+
+form {
+    width: 50%;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
