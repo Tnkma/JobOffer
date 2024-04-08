@@ -7,7 +7,7 @@ from flask import render_template, flash, redirect, request, Blueprint, url_for
 from model.base import Client
 from .utils import *
 
-client_s = Blueprint('client_s', __name__, template_folder='templates', static_folder='static')
+client_s = Blueprint('client_s', __name__, url_prefix="/clients", template_folder='templates', static_folder='static')
 
 
 
@@ -21,7 +21,7 @@ def load_user(user_id):
 
 
 
-@app.route("/register", methods=['GET', 'POST'])
+@client_s.route("/register", methods=['GET', 'POST'])
 def registers():
     """ Register a new client """
     if current_user.is_authenticated:
@@ -33,12 +33,12 @@ def registers():
         new(client)
         save()
         flash(f'Account created, You can now login', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('client_s.login'))
     # flash(f'Account not created, Please fill the forms correctly!', 'danger')
     return render_template('registers.html', title='Register', form=form)
 
 
-@app.route("/login", methods=['GET', 'POST'], strict_slashes=False)
+@client_s.route("/login", methods=['GET', 'POST'], strict_slashes=False)
 def login():
     """We create a object of the Login_Form class"""
     if current_user.is_authenticated:
@@ -55,7 +55,7 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
-@app.route("/account", methods=['GET','POST'], strict_slashes=False)
+@client_s.route("/account", methods=['GET','POST'], strict_slashes=False)
 def account():
     """ Update the account """
     form = UpdateAccountForm()
@@ -74,10 +74,10 @@ def account():
     return render_template('second_profile.html', title='Account', form=form)
 
 
-@app.route("/dashboard", strict_slashes=False) 
+@client_s.route("/dashboard", strict_slashes=False) 
 def dashboard():
     """Renders the dashboard only for authenticated users."""
     if current_user.is_authenticated:
         return render_template('client.html')
     flash(f'Please login to access the dashboard', 'danger')
-    return redirect(url_for('login'))
+    return redirect(url_for('client_s.login'))

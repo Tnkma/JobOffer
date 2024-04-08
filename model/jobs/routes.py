@@ -5,7 +5,7 @@ from model.base import Job
 from .utils import new, save
 from .form import PostJobForm
 
-job_route = Blueprint('job_route', __name__, template_folder='templates', static_folder='static')
+job_route = Blueprint('job_route', __name__, url_prefix="/jobs", template_folder='templates', static_folder='static')
 
 @job_route.route("/jobs/new", methods=['GET', 'POST'], strict_slashes=False)
 @login_required

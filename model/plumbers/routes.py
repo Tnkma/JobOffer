@@ -7,7 +7,7 @@ from flask import render_template, flash, redirect, request, Blueprint, url_for
 from model.base import Plumber
 from .utils import *
 
-plums = Blueprint('plums', __name__, template_folder='templates', static_folder='static')
+plums = Blueprint('plums', __name__, url_prefix="/plumber", template_folder='templates', static_folder='static')
 
 @login_manager.user_loader
 def load_user(user_id):

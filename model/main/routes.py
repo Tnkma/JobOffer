@@ -4,7 +4,7 @@ from flask_login import logout_user
 from model.base import Job
 
 
-main = Blueprint('main', __name__)
+main = Blueprint('main', __name__, url_prefix="/", template_folder='templates', static_folder='static')
 
 @main.route("/jobs")
 @main.route("/home")

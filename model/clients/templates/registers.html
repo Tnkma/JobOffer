@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='register.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('client_s.static', filename='register.css') }}">
 <div class="container vh-100 rounded-4 shadow-lg">
     <form method="POST" action="" class="mx-auto">
         {{ form.hidden_tag() }}
@@ -89,7 +89,7 @@
         </div>
         <div class="border-top mt-2 pt-2 text-center">
             <small class="text-muted">
-                Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
+                Already Have An Account? <a class="ml-2" href="{{ url_for('client_s.login') }}">Sign In</a>
             </small>
         </div>
     </form>

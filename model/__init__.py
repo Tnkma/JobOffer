@@ -21,7 +21,11 @@ bcrypt = Bcrypt(app)
 
 # initialize the login manager
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.blueprint_login_views = {
+    'plums': 'plums.login',
+    'client_s': 'client_s.login',
+    'main': 'main.login'
+}
 login_manager.login_message_category = 'info'
 
 
