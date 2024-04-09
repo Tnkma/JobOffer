@@ -52,7 +52,7 @@ def login():
             return redirect(url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check your email and password', 'danger')    
-    return render_template('login.html', title='Login', form=form)
+    return render_template('login_client.html', title='Login', form=form)
 
 
 @client_s.route("/account", methods=['GET','POST'], strict_slashes=False)

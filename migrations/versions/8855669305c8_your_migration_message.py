@@ -1,8 +1,8 @@
-"""Initial migration
+"""your_migration_message
 
-Revision ID: 47f2dd637807
+Revision ID: 8855669305c8
 Revises: 
-Create Date: 2024-04-07 03:29:32.887777
+Create Date: 2024-04-08 23:47:51.806410
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '47f2dd637807'
+revision = '8855669305c8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,7 +25,7 @@ def upgrade():
     sa.Column('image_file', sa.String(length=20), nullable=False),
     sa.Column('password', sa.String(length=60), nullable=False),
     sa.Column('date_joined', sa.DateTime(), nullable=False),
-    sa.Column('phone', sa.Integer(), nullable=False),
+    sa.Column('phone', sa.String(length=14), nullable=False),
     sa.Column('state', sa.String(length=20), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
@@ -39,20 +39,19 @@ def upgrade():
     )
     op.create_table('plumbers',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('bio', sa.Text(), nullable=False),
-    sa.Column('service_areas', sa.String(length=100), nullable=False),
     sa.ForeignKeyConstraint(['id'], ['base_user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('jobs',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('client_id', sa.Integer(), nullable=True),
-    sa.Column('job_title', sa.String(length=100), nullable=False),
-    sa.Column('job_description', sa.String(length=500), nullable=False),
-    sa.Column('plumber_id', sa.Integer(), nullable=True),
+    sa.Column('job_title', sa.String(length=50), nullable=False),
+    sa.Column('job_description', sa.String(length=100), nullable=False),
+    sa.Column('completed', sa.Boolean(), nullable=True),
     sa.Column('content', sa.String(length=1000), nullable=False),
     sa.Column('date_posted', sa.DateTime(), nullable=False),
     sa.Column('location', sa.String(length=100), nullable=False),
+    sa.Column('client_id', sa.Integer(), nullable=True),
+    sa.Column('plumber_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ),
     sa.ForeignKeyConstraint(['plumber_id'], ['plumbers.id'], ),
     sa.PrimaryKeyConstraint('id')

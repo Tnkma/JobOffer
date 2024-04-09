@@ -3,10 +3,11 @@
 from datetime import datetime
 from model import Base
 from flask_login import UserMixin
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float, Table, MetaData
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float, Table, MetaData, Boolean
 from sqlalchemy.orm import relationship
 
-# metadata = MetaData()
+metadata = MetaData()
+
 
 
 class BaseUser(Base, UserMixin):
@@ -28,8 +29,15 @@ class BaseUser(Base, UserMixin):
     def get_id(self):
         """ Returns the User_id (primary key)"""
         return self.id
-
     
+    
+# The association table between jobs and plumbers
+jobs_plumbers = Table('jobs_plumbers', metadata,
+    Column('plumber_id', Integer, ForeignKey('plumbers.id')),
+    Column('job_id', Integer, ForeignKey('jobs.id'))
+)
+
+
 class Plumber(BaseUser):
     """ Plumber models from Baseuser """
     __tablename__ = 'plumbers'
@@ -37,8 +45,11 @@ class Plumber(BaseUser):
     # bio = Column(Text, nullable=True)
     # service_areas = Column(String(100), nullable=True)
     
-    completed_jobs = relationship('Job', backref="plumbers")
+    completed_jobs = relationship('Job', backref="plumber")
+    # Establishing a many to many relationship between plumbers and jobs
+    jobs = relationship('Job', secondary=jobs_plumbers, backref='plumbers')
     
+    # Relationship between plumbers and clients messages and ranking
     message = relationship('Message', backref='plumber_message')
     rank = relationship('Rank', backref='plumber_rank')
     
@@ -51,40 +62,47 @@ class Plumber(BaseUser):
     
     def __repr__(self):
         return f"Plumber('{self.username}', '{self.email}', '{self.phone}', '{self.state}', '{self.image_file}'"
-
+    
     
     
 class Job(Base):
     __tablename__ = 'jobs'
-    id = Column(Integer, primary_key=True)
-    
-    client_id = Column(Integer, ForeignKey('clients.id'))
-    
-    job_title = Column(String(100), nullable=False)
-    job_description = Column(String(500), nullable=False)
-    
-    plumber_id = Column(Integer, ForeignKey('plumbers.id'))
-    
+    id = Column(Integer, primary_key=True) 
+    job_title = Column(String(50), nullable=False)
+    job_description = Column(String(100), nullable=False)
+    completed = Column(Boolean, default=False)
     content = Column(String(1000), nullable=False)
     date_posted = Column(DateTime, nullable=False, default=datetime.utcnow)
     location = Column(String(100), nullable=False)
+    
+    
+    # Relationship between jobs and clients
+    client_id = Column(Integer, ForeignKey('clients.id'))
+    plumber_id = Column(Integer, ForeignKey('plumbers.id'))
+    
+    # Relationship between jobs and plumbers
+    plumbers = relationship('Plumber', secondary=jobs_plumbers, backref='jobs')
+    
+    # Relationship between jobs and plumber mesaages if they even exit
+    message = relationship('Message', backref='job_message')
     rank = relationship('Rank', backref='job_rank')
-    # applicants = relationship('Plumber', secondary='applications', backref='jobs_applied')
 
     
     def __str__(self):
-        return f"Job('{self.job_title}', '{self.date_posted}', '{self.client_id}', '{self.content}', '{self.location}'), '{self.plumber_id}', '{self.job_description}'"
+        return f"Job('{self.job_title}', '{self.date_posted}', '{self.completed}', '{self.content}', '{self.location}'), '{self.job_description}'"
     
     
     def __repr__(self):
         return f"Job('{self.job_title}', '{self.date_posted}', '{self.client_id}', '{self.content}', '{self.location}'), '{self.plumber_id}', '{self.job_description}'"
-        
+
+
+   
 class Client(BaseUser):
     """ Clients models inheriting from BaseUser """
     __tablename__ = 'clients'
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
     jobs = relationship('Job', backref="clients")
-    # completed_jobs = relationship('Job', backref='completed_job')
+    
     message = relationship('Message', backref='client_message')
     rank = relationship('Rank', backref='client_rank')
     
@@ -98,11 +116,6 @@ class Client(BaseUser):
     def __repr__(self):
         """ Returns the clients repr """
         return f"Client('{self.username}', '{self.email}', '{self.image_file}', '{self.phone}', '{self.state}')"
-    
-     
-# jobs_plumbers = Table('jobs_plumbers', metadata,
-    # Column('job_id', Integer, ForeignKey('jobs.id'), primary_key=True),
-    # Column('plumber_id', Integer, ForeignKey('plumbers.id'), primary_key=True))
 
 
 class Message(Base):
