@@ -8,13 +8,6 @@ from sqlalchemy.orm import relationship
 
 metadata = MetaData()
 
-# The association table between jobs and plumbers
-jobs_plumbers = Table('jobs_plumbers', metadata,
-    Column('job_id', Integer, ForeignKey('jobs.id')),
-    Column('plumber_id', Integer, ForeignKey('plumbers.id')),
-)
-
-
 class BaseUser(Base, UserMixin):
     """The Base User for clients and plumbers"""
     # __tablename__ = 'users'
@@ -34,15 +27,20 @@ class BaseUser(Base, UserMixin):
     def get_id(self):
         """ Returns the User_id (primary key)"""
         return self.id
-    
-   
+
+# The association table between jobs and plumbers
+#jobs_plumbers = Table('jobs_plumbers', metadata,
+    # Column('job_id', Integer, ForeignKey('jobs.id'), primary_key=True),                  
+   # Column('plumber_id', Integer, ForeignKey('plumbers.id'), primary_key=True)
+#)
+
 
 class Job(Base):
     __tablename__ = 'jobs'
     id = Column(Integer, primary_key=True)
     
      # Relationship between jobs and plumbers
-    plumbers = relationship('Plumber', secondary=jobs_plumbers, backref='plumbers')
+    #plumbers = relationship('Plumber', secondary=jobs_plumbers, backref='jobs')
     
     job_title = Column(String(50), nullable=False)
     job_description = Column(String(100), nullable=False)
@@ -51,22 +49,21 @@ class Job(Base):
     date_posted = Column(DateTime, nullable=False, default=datetime.utcnow)
     location = Column(String(100), nullable=False)    
     # Relationship between jobs and clients
-    clients_id = Column(Integer, ForeignKey('clients.id'))
-    plumbers_id = Column(Integer, ForeignKey('plumbers.id'))
+    client_id = Column(Integer, ForeignKey('clients.id'))
+    #client = relationship('Client', backref='jobs')
     
     
     # Relationship between jobs and plumber mesaages if they even exit
-    message = relationship('Message', backref='job_message')
+    # message = relationship('Message', backref='job_message')
     rank = relationship('Rank', backref='job_rank')
 
     
-    def __str__(self):
-        return f"Job('{self.job_title}', '{self.date_posted}', '{self.completed}', '{self.content}', '{self.location}'), '{self.job_description}'"
+    #def __str__(self):
+        #return f"Job('{self.job_title}', '{self.date_posted}', '{self.completed}', '{self.content}', '{self.location}'), '{self.job_description}'"
     
     
     def __repr__(self):
         return f"Job('{self.job_title}', '{self.date_posted}', '{self.client_id}', '{self.content}', '{self.location}'), '{self.plumber_id}', '{self.job_description}'"
-
 
 
 class Plumber(BaseUser):
@@ -75,10 +72,8 @@ class Plumber(BaseUser):
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
     # bio = Column(Text, nullable=True)
     # service_areas = Column(String(100), nullable=True)
-    
-    completed_jobs = relationship('Job', backref="plumber")
     # Establishing a many to many relationship between plumbers and jobs
-    jobs = relationship('Job', backref='plumbers', secondary=jobs_plumbers)
+    #jobs = relationship('Job', secondary=jobs_plumbers, backref='plumbers')
     
     # Relationship between plumbers and clients messages and ranking
     message = relationship('Message', backref='plumber_message')
@@ -87,8 +82,8 @@ class Plumber(BaseUser):
     def __init__(self, username, email, phone, state, password):
         super().__init__(username=username, email=email, phone=phone, state=state, password=password)
         
-    def __str__(self):
-        return f"Plumber('{self.username}', '{self.email}', '{self.phone}', '{self.state}', '{self.image_file}'"
+    #def __str__(self):
+        #return f"Plumber('{self.username}', '{self.email}', '{self.phone}', '{self.state}', '{self.image_file}'"
 
     
     def __repr__(self):

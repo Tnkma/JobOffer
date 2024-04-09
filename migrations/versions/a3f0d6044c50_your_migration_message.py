@@ -1,8 +1,8 @@
 """your_migration_message
 
-Revision ID: b5c01d445a5d
+Revision ID: a3f0d6044c50
 Revises: 
-Create Date: 2024-04-09 02:29:14.810422
+Create Date: 2024-04-09 15:04:22.893414
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b5c01d445a5d'
+revision = 'a3f0d6044c50'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -51,9 +51,7 @@ def upgrade():
     sa.Column('date_posted', sa.DateTime(), nullable=False),
     sa.Column('location', sa.String(length=100), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=True),
-    sa.Column('plumber_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ),
-    sa.ForeignKeyConstraint(['plumber_id'], ['plumbers.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('message',
