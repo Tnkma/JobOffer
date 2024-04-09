@@ -28,12 +28,24 @@
                         <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                     </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('client_s.login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('client_s.registers') }}">Register</a>
-                    </li>
+                    <div class="dropdown ml-4">
+                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Login as
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ url_for('plums.login') }}"> A Plumber</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('client_s.login') }}">A Client</a></li>
+                      </ul>
+                    </div>
+                    <div class="dropdown">
+                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Register as
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ url_for('plums.register') }}">A Plumber</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('client_s.registers') }}">A client</a></li>
+                      </ul>
+                    </div>
                 {% endif %}
             </ul>
       </div>

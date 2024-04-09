@@ -16,7 +16,7 @@
 
 .sidebar-content {
     flex-grow: 1; /* Allow content to grow and fill remaining space */
-    padding: 0px; /* Padding around content */
+    padding: 10px; /* Padding around content */
     background-color: #ffffff; /* Content background color */
     flex: 1;
     margin-top: -30px;

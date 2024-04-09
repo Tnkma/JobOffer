@@ -4,7 +4,7 @@ from model import app, bcrypt, login_manager
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm
 from flask_login import current_user, login_user
 from flask import render_template, flash, redirect, request, Blueprint, url_for
-from model.base import Client
+from model.base import Client, Job, JobPlumber
 from .utils import *
 
 client_s = Blueprint('client_s', __name__, url_prefix="/clients", template_folder='templates', static_folder='static')
@@ -81,3 +81,35 @@ def dashboard():
         return render_template('client.html')
     flash(f'Please login to access the dashboard', 'danger')
     return redirect(url_for('client_s.login'))
+
+@client_s.route("/dashboard/posted_jobs",  methods=['GET','POST'],strict_slashes=False)
+def posted_jobs():
+    """ Renders the jobs posted by the client """
+    jobs = Job.query.filter_by(client_id=current_user.id).all()
+    return render_template('posted_jobs.html', jobs=jobs)
+
+
+
+@client_s.route("/dashboard/assigned_jobs", methods=['GET', 'POST'], strict_slashes=False)
+def assigned_jobs():
+    """ Renders the jobs posted by the client """
+    posted_jobs = Job.query.filter_by(client_id=current_user.id).all()
+     
+    # Check if any of the posted jobs have been assigned to plumbers
+    assigned_jobs = []
+    for job in posted_jobs:
+        if job.plumbers:
+            assigned_jobs.append(job)
+
+    # Check if there are no assigned jobs
+    if assigned_jobs:
+        # Loop through the jobs assigned to plumbers
+        jobs = []
+        for job in assigned_jobs:
+            job_plumbers = job.plumbers
+            for plumber in job_plumbers:
+                jobs.append(plumber.job)
+                return render_template('assigned_jobs.html', jobs=jobs, title='Assigned Jobs')
+    else:
+         return  "<p>You have not assigned any jobs to plumbers yet.</p>"
+    # return render_template('assigned_jobs.html', jobs=jobs, title='Assigned Jobs')

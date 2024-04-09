@@ -1,0 +1,15 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('client_s.static', filename='main.css') }}">
+{% for job in jobs %}
+<article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <small class="text-muted"><strong>Date: </strong>{{ job.date_posted.strftime('%Y-%m-%d') }}</small>
+        <div class="mt-2">
+          <small class="text-muted"><strong>Location: {{ job.location }} State.</strong></small>
+        </div>
+      </div>
+      <p class="article-content">{{ job.job_description }}</p>
+      <p class="article-content">{{ job.content }}</p>   
+    </div>
+  </article>
+{% endfor %}
