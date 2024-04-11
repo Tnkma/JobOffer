@@ -2,9 +2,9 @@
 
 from model import bcrypt, login_manager
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user,login_required
 from flask import render_template, flash, redirect, request, Blueprint, url_for
-from model.base import Plumber
+from model.base import Plumber, JobPlumber, Job
 from .utils import *
 
 plums = Blueprint('plums', __name__, url_prefix="/plumber", template_folder='templates', static_folder='static')
@@ -85,4 +85,32 @@ def account():
         form.phone.data = current_user.phone
         form.state.data = current_user.state
     return render_template('second_profile.html', title='Account', form=form)
+
+
+@plums.route("/dashboard/assigned_jobs", methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def assigned_jobs():
+    """ Returns the list of jobs assigned to the current plumber """
+    assigned_jobs = (
+        db.session.query(Job)
+        .join(JobPlumber, Job.id == JobPlumber.job_id)
+        .filter(JobPlumber.plumber_id == current_user.id, JobPlumber.is_assigned == True)
+        .all()
+    )
+    return render_template('assigned_jobs.html', title='Assigned Jobs', jobs=assigned_jobs)
+
+
+@plums.route("/dashboard/applied_jobs", methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def applied_jobs():
+  """ Returns the list of jobs the current plumber has applied to """
+  applied_jobs = (
+    db.session.query(Job)
+    .join(JobPlumber, Job.id == JobPlumber.job_id)
+    .filter(JobPlumber.plumber_id == current_user.id)
+    .all()
+  )
+  return render_template('applied_jobs.html', title='Applied Jobs', jobs=applied_jobs)
+
+
 

@@ -6,7 +6,7 @@ from model.base import Job
 
 main = Blueprint('main', __name__, url_prefix="/", template_folder='templates', static_folder='static')
 
-@main.route("/jobs")
+@main.route("/")
 @main.route("/home")
 def home():
     """ Renders the homepage to everyone """

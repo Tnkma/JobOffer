@@ -33,6 +33,7 @@ class JobPlumber(Base):
     id = Column(Integer, primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'))
     plumber_id = Column(Integer, ForeignKey('plumbers.id'))
+    is_assigned = Column(Boolean, default=False)
     
     plumber = relationship('Plumber', backref='job_plumbers')
     job = relationship('Job', backref='job_plumbers')
@@ -45,7 +46,8 @@ class Job(Base):
     completed = Column(Boolean, default=False)
     content = Column(String(1000), nullable=False)
     date_posted = Column(DateTime, nullable=False, default=datetime.utcnow)
-    location = Column(String(100), nullable=False)    
+    location = Column(String(100), nullable=False)
+    
     # Relationship between jobs and clients
     client_id = Column(Integer, ForeignKey('clients.id'))
 
