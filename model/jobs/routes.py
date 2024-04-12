@@ -13,7 +13,13 @@ def post_new_job():
     """ Posts new job"""
     form = PostJobForm()
     if form.validate_on_submit():
-        job  = Job(job_title=form.job_title.data, content=form.content.data, location=form.state.data, job_description=form.job_description.data, client_id=current_user.id)
+        job  = Job(
+            job_title=form.job_title.data,
+            content=form.content.data,
+            location=form.state.data,
+            job_description=form.job_description.data,
+            client_id=current_user.id
+        )
         new(job)
         save()
         flash(f'Job posted successfully!', 'success')
@@ -23,7 +29,7 @@ def post_new_job():
 
 @job_route.route("/jobs/<int:job_id>", strict_slashes=False)
 def job(job_id):
-    """ Renders the job details """
+    """ Renders the job details on homepage """
     job = Job.query.get_or_404(job_id)
     return render_template('job.html', title=job.job_title, job=job)
 

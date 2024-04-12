@@ -7,15 +7,20 @@ from flask import render_template, flash, redirect, request, Blueprint, url_for,
 from model.base import Client, Job, JobPlumber, Plumber
 from .utils import *
 
-client_s = Blueprint('client_s', __name__, url_prefix="/clients", template_folder='templates', static_folder='static')
+client_s = Blueprint(
+    'client_s',
+    __name__, 
+    url_prefix="/clients",
+    template_folder='templates',
+    static_folder='static'
+)
 
 
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Assuming Client objects have a primary key 'id'
-    #return get_single(Client, id=user_id)
+    """ load the user """
     client = Client.query.get(int(user_id))
     return client
 
@@ -29,7 +34,13 @@ def registers():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        client = Client(username=form.username.data, email=form.email.data, password=hashed_password, phone=form.phone.data, state=form.state.data)
+        client = Client(
+            username=form.username.data,
+            email=form.email.data,
+            password=hashed_password,
+            phone=form.phone.data,
+            state=form.state.data
+        )
         new(client)
         save()
         flash(f'Account created, You can now login', 'success')
@@ -112,7 +123,7 @@ def view_applicants(job_id):
             try:
                 selected_plumber = Plumber.query.get(int(selected_plumber_id))
                 if selected_plumber:
-                    # Check if an existing entry exists (optional)
+                    # Check if an existing entry exists
                     existing_assignment = JobPlumber.query.filter_by(job=job, plumber=selected_plumber).first()
                     if existing_assignment:
                         existing_assignment.is_assigned = True
@@ -123,7 +134,7 @@ def view_applicants(job_id):
                         new(new_assignment)
                         save()
                         flash('Job successfully assigned!', 'success')
-                        return redirect(url_for('client_s.view_jobs'))  # Redirect after successful assignment
+                        return redirect(url_for('client_s.posted_jobs'))  # Redirect after successful assignment
                 else:
                     flash('Invalid plumber selection!', 'error')
             except ValueError:  # Handle potential conversion errors

@@ -1,20 +1,28 @@
-{% extends 'layout.html' %}
-{% block content %}
-<h1>Job Applicants for "{{ job.title }}"</h1>
-  {% if applicants %}
-    <form method="POST">
-      {% for applicant in applicants %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('client_s.static', filename='main.css') }}">
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <h1>Job Applicants for "{{ job.title }}"</h1>
+      {% if applicants %}
+      <form method="POST">
+        {% for applicant in applicants %}
         <div class="applicant">
           <p><strong>{{ applicant.name }}</strong></p>
           <p>{{ applicant.email }}</p>
           <p>{{ applicant.phone_number }}</p>
-          <input type="radio" name="assigned_plumber" id="applicant-{{ applicant.id }}" value="{{ applicant.id }}">
+          <input
+            type="radio"
+            name="assigned_plumber"
+            id="applicant-{{ applicant.id }}"
+            value="{{ applicant.id }}" />
           <label for="applicant-{{ applicant.id }}">Assign Job</label>
         </div>
-      {% endfor %}
-      <button type="submit">Assign Job</button>
-    </form>
-  {% else %}
-    <p>No applicants found for this job yet.</p>
-  {% endif %}
-{% endblock %}
+        {% endfor %}
+        <button type="submit">Assign Job</button>
+      </form>
+      {% else %}
+      <p>No applicants found for this job yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</article>

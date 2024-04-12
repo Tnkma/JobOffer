@@ -54,7 +54,3 @@ class PostJobForm(FlaskForm):
 class RankForm(FlaskForm):
     rank = SelectField('Rank', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')])
     submit = SubmitField('Rank')
-    
-class ApplyForm(FlaskForm):
-    
-    submit = SubmitField('Apply')
