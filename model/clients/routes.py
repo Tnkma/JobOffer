@@ -2,7 +2,7 @@
 
 from model import app, bcrypt, login_manager
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm
-from flask_login import current_user, login_user, login_required
+from flask_login import current_user, login_user, login_required, logout_user, successful_login
 from flask import render_template, flash, redirect, request, Blueprint, url_for, abort
 from model.base import Client, Job, JobPlumber, Plumber
 from .utils import *
@@ -21,7 +21,7 @@ client_s = Blueprint(
 @login_manager.user_loader
 def load_user(user_id):
     """ load the user """
-    client = Client.query.get(int(user_id))
+    client = Client.query.get(user_id)
     return client
 
 
@@ -53,14 +53,15 @@ def registers():
 def login():
     """We create a object of the Login_Form class"""
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(next or url_for('main.home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = Client.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            flash('You have been logged in!', 'success')
-            return redirect(url_for('main.home'))
+            if successful_login(user):
+                login_user(user, remember=form.remember_me.data)
+                flash('You have been logged in!', 'success')
+                return redirect(next or url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check your email and password', 'danger')    
     return render_template('login_client.html', title='Login', form=form)
@@ -140,5 +141,14 @@ def view_applicants(job_id):
             except ValueError:  # Handle potential conversion errors
                 flash('Invalid selection!', 'error')
     return render_template('applicants.html', title='Job Applicants', job=job, applicants=applicants)
+
+
+@client_s.route('/logout')
+@login_required
+def logout():
+    """remove the username from the session if it's there"""
+    logout_user()
+    flash(f'You have been logged out!', 'warning')
+    return redirect(url_for('main.home'))
             
         

@@ -9,7 +9,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
+app.config['SECRET_KEY'] = '5421691148efa035624f86ae37a3964f6775ee7870c65c9687ee82b790f69c05'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'site.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -20,12 +20,13 @@ Base = db.Model
 bcrypt = Bcrypt(app)
 
 # initialize the login manager
-login_manager = LoginManager(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 login_manager.blueprint_login_views = {
     'plums': 'plums.login',
-    'client_s': 'client_s.login',
-    'main': 'main.login'
+    'client_s': 'client_s.login'
 }
+login_manager.session_protection = "strong"
 login_manager.login_message_category = 'info'
 
 
