@@ -115,3 +115,11 @@ class UpdateAccountForm(FlaskForm):
             email = Client.query.filter_by(email=email.data).first()
             if email:
                 raise ValidationError('This email already exist. Please choose a different one.')
+            
+            
+            
+            
+class SelectState(FlaskForm):
+    state = SelectField('State', choices=STATE_CHOICE)
+    submit = SubmitField('Select State')
+    

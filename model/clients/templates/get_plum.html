@@ -1,0 +1,15 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('client_s.static', filename='main.css') }}">
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <div class="text-text-muted"><strong>State: </strong>{{ plumber.state }}</div>
+    </div>
+    <ul>
+        <li>{{ plumber.name }}</li>
+        <li>{{ plumber.email }}</li>
+        <li>{{ plumber.phone }}</li>
+      {% if not plumber %}
+        <li>No plumber yet from {{ plumber.state }}.</li>
+      {% endif %}
+    </ul>
+  </div>

@@ -26,7 +26,6 @@ def post_new_job():
         return redirect(url_for('main.home'))
     return render_template('post_job.html', title='Post Job', form=form)
 
-
 @job_route.route("/jobs/<int:job_id>", strict_slashes=False)
 def job(job_id):
     """ Renders the job details on homepage """
@@ -34,9 +33,13 @@ def job(job_id):
     return render_template('job.html', title=job.job_title, job=job)
 
 @job_route.route("/apply_job/<int:job_id>", strict_slashes=False)
+@login_required
 def apply_job(job_id):
     """ Apply for a job """
     job = Job.query.get_or_404(job_id)
+    if job.client == current_user:
+        flash(f'You cannot apply for your own job!', 'danger')
+        return redirect(url_for('main.home'))
     job_plumber = JobPlumber(job_id=job.id, plumber_id=current_user.id)
     new(job_plumber)
     save()

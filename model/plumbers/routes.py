@@ -7,14 +7,20 @@ from flask import render_template, flash, redirect, request, Blueprint, url_for
 from model.base import Plumber, JobPlumber, Job
 from .utils import *
 
-plums = Blueprint('plums', __name__, url_prefix="/plumber", template_folder='templates', static_folder='static')
+plums = Blueprint('plums',
+                  __name__,
+                  url_prefix="/plumber",
+                  template_folder='templates',
+                  static_folder='static'
+                )
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Assuming Client objects have a primary key 'id'
-    #return get_single(Client, id=user_id)
-    plumber = Plumber.query.get(int(user_id))
-    return plumber
+    try:
+        plumber = Plumber.query.get(int(user_id))
+        return plumber
+    except:
+        return None
 
 
 @plums.route("/register", methods=['GET', 'POST'])
@@ -29,7 +35,6 @@ def register():
         if existing_user:
             flash('Username already exists. Please choose a different one.', 'danger')
             return redirect(url_for('plums.register'))
-        
         # Proceed with user registration
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         client = Plumber(username=form.username.data, email=form.email.data, password=hashed_password, phone=form.phone.data, state=form.state.data)
@@ -53,19 +58,11 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
             flash('You have been logged in!', 'success')
-            return redirect(url_for('main.home'))
+            next = request.args.get('next')
+            return redirect(next or url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check your email and password', 'danger')    
     return render_template('login.html', title='Login', form=form)
-
-
-@plums.route("/dashboard", strict_slashes=False) 
-def dashboard():
-    """Renders the dashboard only for authenticated users."""
-    if current_user.is_authenticated:
-        return render_template('plumber.html')
-    flash(f'Please login to access the dashboard', 'danger')
-    return redirect(url_for('plums.login'))
 
 
 @plums.route("/account", methods=['GET','POST'], strict_slashes=False)
