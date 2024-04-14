@@ -37,7 +37,7 @@ def job(job_id):
 def apply_job(job_id):
     """ Apply for a job """
     job = Job.query.get_or_404(job_id)
-    if job.client == current_user:
+    if job.clients == current_user:
         flash(f'You cannot apply for your own job!', 'danger')
         return redirect(url_for('main.home'))
     job_plumber = JobPlumber(job_id=job.id, plumber_id=current_user.id)
@@ -51,7 +51,7 @@ def apply_job(job_id):
 def update_job(job_id):
     """ Update the job """
     job = Job.query.get_or_404(job_id)
-    if job.client != current_user:
+    if job.clients != current_user:
         abort(403)
     form = PostJobForm()
     if form.validate_on_submit():
@@ -61,7 +61,7 @@ def update_job(job_id):
         job.job_description = form.job_description.data
         save()
         flash(f'Job updated successfully!', 'success')
-        return redirect(url_for('job_route.job', job_id=job.id))
+        return render_template('client.html', job_id=job.id)
     elif request.method == 'GET':
         form.job_title.data = job.job_title
         form.content.data = job.content
@@ -74,7 +74,7 @@ def update_job(job_id):
 def delete_job(job_id):
     """ Delete the job """
     job = Job.query.get_or_404(job_id)
-    if job.client != current_user:
+    if job.clients != current_user:
         abort(403)
     delete(job)
     flash(f'Job deleted successfully!', 'success')

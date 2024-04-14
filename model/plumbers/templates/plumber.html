@@ -1,44 +1,44 @@
 {% extends "layout.html" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plum.css') }}">
-<div class="container-fluid">
+<link rel="stylesheet" type="text/css" href="{{ url_for('plums.static', filename='plum.css') }}">
+<div class="container">
   <div class="row">
   <div class="row flex-nowrap">
     <div class="bg-dark col-auto col-md-4 col-lg-3 min-vh-100">
       <div class="bg-dark p-4">
         <ul class="nav nav-pills flex-column mt-5">
           <li class="nav-item">
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-tachometer-alt"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Dashboard</span>
             </a>
           </li>
           <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-home"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Home</span>
             </a>
           </li>
           <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-briefcase"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Current Job</span>
             </a>
           </li>
           <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-history"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Previous jobs</span>
             </a>
           </li>
           <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-envelope"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Messages</span>
             </a>
           </li>
           <li class="nav-item py-2 py-sm-0 mask">
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-star"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Ranking</span>
             </a>
@@ -48,4 +48,48 @@
     </div>
   </div>
 </div>
+<div class="sidebar-content" id="sidebar-content">
+  <!-- Content will be dynamically loaded here -->
+</div>
+</div>
+<!-- end of content section -->
+<script>
+$(document).ready(function() {
+   // Function to load sidebar content from local storage
+   function loadSidebarContent() {
+       var content = localStorage.getItem('sidebarContent');
+       if (content) {
+           $("#sidebar-content").html(content);
+       }
+   }
+
+   // Handle click events on sidebar links
+   $(".sidebar-link").click(function(event) {
+       event.preventDefault();  // Prevent default link behavior
+       
+       // Get the URL from the data-url attribute
+       var url = $(this).data('url');
+       
+       // Make an AJAX request to the Flask route
+       $.ajax({
+           url: url,
+           type: 'GET',
+           success: function(response) {
+               // Replace the content area with the fetched content
+               $("#sidebar-content").html(response);
+               // Save the content to local storage
+               localStorage.setItem('sidebarContent', response);
+           },
+           error: function(xhr, status, error) {
+               console.error("Error fetching content:", error);
+           }
+       });
+   });
+
+   // Load sidebar content on initial page load
+   loadSidebarContent();
+});  
+</script>
+
 {% endblock %}
+

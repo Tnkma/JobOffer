@@ -7,10 +7,34 @@
         <small class="text-muted"><strong>Date: </strong>{{ job.date_posted.strftime('%Y-%m-%d') }}</small>
         <div class="mt-2">
           <small class="text-muted"><strong>Location: {{ job.location }} State.</strong></small>
+            <div>
+              <a class="btn btn-secondary btn-sm mt-1" href="{{ url_for('job_route.update_job', job_id=job.id) }}">Update</a>
+              <button type="button" class="btn btn-danger btn-sm mt-1"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+            </div>
+          {% if not job %}
+            <li>No job yet from {{ job.location }}.</li>
+          {% endif %}
         </div>
       </div>
       <p class="article-content">{{ job.job_description }}</p>
       <p class="article-content">{{ job.content }}</p>   
     </div>
   </article>
+    <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Job Post?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <form action="{{ url_for('job_route.delete_job', job_id=job.id) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endfor %}

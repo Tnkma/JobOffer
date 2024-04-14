@@ -124,7 +124,7 @@ def view_applicants():
                         new(new_assignment)
                         save()
                         flash('Job successfully assigned!', 'success')
-                    #return redirect(url_for('client_s.view_applicants'))  # Refresh after assignment
+                    return redirect(url_for('client_s.view_applicants', title='View Applicants', job_applicants=job_applicants, current_user_jobs=current_user_jobs))  # Refresh after assignment
                 else:
                     flash('Invalid job or plumber selection.', 'error')
             except ValueError:
