@@ -1,6 +1,7 @@
 
 .nav-pills li a:hover {
     background-color: rgb(67, 70, 233);
+
 }
 
 .container {
@@ -8,10 +9,10 @@
 }
 
 .sidebar {
-    width: 250px; /* Adjust width as needed */
-    padding: 130px; /* Padding around sidebar content */
+    padding: 150px; /* Padding around sidebar content */
     margin-top: -70px;
-    margin-left: -206px;
+    width: 250px;
+    margin-left: 5px;
 }
 
 .sidebar-content {
@@ -24,9 +25,13 @@
 
 }
 .nav {
-    margin-left: -60px;
-    
+    margin-left: -217px;
+    margin-top: -50px;
+}
 
+.nav-nav {
+    margin-left: -80px;
+    margin-top: 10px;
 }
 
 

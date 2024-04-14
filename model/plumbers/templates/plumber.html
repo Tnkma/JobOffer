@@ -1,43 +1,42 @@
 {% extends "layout.html" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('plums.static', filename='plum.css') }}">
-<div class="container">
-  <div class="row">
-  <div class="row flex-nowrap">
-    <div class="bg-dark col-auto col-md-4 col-lg-3 min-vh-100">
-      <div class="bg-dark p-4">
-        <ul class="nav nav-pills flex-column mt-5">
-          <li class="nav-item">
+<link rel="stylesheet" type="text/css" href="{{ url_for('plums.static', filename='plums.css') }}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="container" method="POST" action="">
+    <div class="nav bg-dark">
+      <div class="side">
+        <ul class="sidebar nav-pills">
+          <li class="nav-item nav-nav">
             <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-tachometer-alt"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
+          <li class="nav-item nav-nav py-2 py-sm-0 mask">
             <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-home"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Home</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
+          <li class="nav-item nav-nav py-2 py-sm-0 mask">
             <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-briefcase"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Current Job</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
+          <li class="nav-item nav-nav py-2 py-sm-0 mask">
             <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-history"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Previous jobs</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
+          <li class="nav-item nav-nav py-2 py-sm-0 mask">
             <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-envelope"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Messages</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
+          <li class="nav-item nav-nav py-2 py-sm-0 mask">
             <a href="#" class="sidebar-link text-white">
                 <i class="fs-5 fas fa-star"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Ranking</span>
@@ -45,7 +44,6 @@
           </li> 
         </ul>
       </div>
-    </div>
   </div>
 </div>
 <div class="sidebar-content" id="sidebar-content">
@@ -57,7 +55,7 @@
 $(document).ready(function() {
    // Function to load sidebar content from local storage
    function loadSidebarContent() {
-       var content = localStorage.getItem('sidebarContent');
+       var content = localStorage.getItem('sidebardContent');
        if (content) {
            $("#sidebar-content").html(content);
        }
@@ -78,7 +76,7 @@ $(document).ready(function() {
                // Replace the content area with the fetched content
                $("#sidebar-content").html(response);
                // Save the content to local storage
-               localStorage.setItem('sidebarContent', response);
+               localStorage.setItem('sidebardContent', response);
            },
            error: function(xhr, status, error) {
                console.error("Error fetching content:", error);
