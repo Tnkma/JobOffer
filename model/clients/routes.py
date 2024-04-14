@@ -15,15 +15,6 @@ client_s = Blueprint(
     static_folder='static'
 )
 
-@login_manager.user_loader
-def load_user(user_id):
-    """ load the user """
-    try:
-        client = Client.query.get(user_id)
-        return client
-    except:
-        return None
-
 
 
 @client_s.route("/register", methods=['GET', 'POST'])
@@ -59,7 +50,7 @@ def login():
         user = Client.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
-            flash('You have been logged in!', 'success')
+            flash('Welcome! You have been logged in', 'success')
             return redirect(url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check your email and password', 'danger')    
@@ -82,7 +73,7 @@ def account():
         form.email.data = current_user.email
         form.phone.data = current_user.phone
         form.state.data = current_user.state
-    return render_template('second_profile.html', title='Account', form=form)
+    return render_template('second_profiles.html', title='Account', form=form)
 
 # Jobs the current_user posted
 @client_s.route("/dashboard/posted_jobs",  methods=['GET','POST'],strict_slashes=False)
@@ -150,17 +141,11 @@ def view_applicants():
     
     
 @client_s.route("/dashboard/get_plumber_by_state", methods=['GET', 'POST'])
-def get_state():
-  """gets plumbers based on sate"""
-  form = SelectState()
-
-  if form.validate_on_submit():
-    states = form.state.data
+def get_state():    
+    """gets plumbers based on sate"""
+    states = 'Abia'
     plumber = Plumber.query.filter_by(state=states).all()
     return render_template('get_plum.html', form=form, plumber=plumber)  # Pass form for error display
-  else:
-    return render_template('get_plum.html', form=form)  # Pass form for error display
-
 
 
 

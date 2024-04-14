@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from model import bcrypt, login_manager
+from model import bcrypt
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm
 from flask_login import current_user, login_user,login_required
 from flask import render_template, flash, redirect, request, Blueprint, url_for
@@ -14,13 +14,6 @@ plums = Blueprint('plums',
                   static_folder='static'
                 )
 
-@login_manager.user_loader
-def load_user(user_id):
-    try:
-        plumber = Plumber.query.get(int(user_id))
-        return plumber
-    except:
-        return None
 
 
 @plums.route("/register", methods=['GET', 'POST'])
@@ -65,22 +58,24 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
-@plums.route("/account", methods=['GET','POST'], strict_slashes=False)
-def account():
+@plums.route("/accounts", methods=['GET','POST'], strict_slashes=False)
+def accounts():
     """ Update the account """
     form = UpdateAccountForm()
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
         current_user.phone = form.phone.data
+        current_user.bio = form.bio.data
         save()
         flash('Your account has been updated!', 'success')
-        return redirect(url_for('plums.account'))
+        return redirect(url_for('plums.accounts'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
         form.phone.data = current_user.phone
         form.state.data = current_user.state
+        form.bio.data = current_user.bio
     return render_template('second_profile.html', title='Account', form=form)
 
 

@@ -1,5 +1,5 @@
 
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from phonenumbers import parse, is_valid_number, national_significant_number, NumberParseException
 from flask_wtf import FlaskForm
@@ -107,6 +107,7 @@ class UpdateAccountForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     phone = StringField('Phone Number (+234)', validators=[validate_phone, DataRequired()])
     state = SelectField('State', choices=STATE_CHOICE)
+    bio = TextAreaField('Tell Us About Yourself', validators=[Length(min=0, max=140, message='Bio must be less than 140 characters'), DataRequired()])
     submit = SubmitField('Update Account')
     
     def validate_email(self, email):

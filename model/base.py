@@ -60,7 +60,7 @@ class Plumber(BaseUser):
     """ Plumber models from Baseuser """
     __tablename__ = 'plumbers'
     id = Column(Integer, ForeignKey('base_user.id'), primary_key=True)
-    # bio = Column(Text, nullable=True)
+    bio = Column(Text, nullable=True)
     # service_areas = Column(String(100), nullable=True)
     
     def __init__(self, username, email, phone, state, password):

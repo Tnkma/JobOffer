@@ -30,11 +30,22 @@ login_manager.session_protection = "strong"
 login_manager.login_message_category = 'info'
 
 
-
 from model.plumbers.routes import plums
 from model.clients.routes import client_s
 from model.jobs.routes import job_route
 from model.main.routes import main
+from .base import Plumber, Client
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """ Loads the user """
+    x = Plumber.query.get(str(user_id))
+    if x == None:
+        x = Client.query.get(str(user_id))
+        
+    return x
+
 
 app.register_blueprint(plums)
 app.register_blueprint(client_s)

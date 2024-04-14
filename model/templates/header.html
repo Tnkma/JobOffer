@@ -21,16 +21,9 @@
         </form>-->
             <ul class="navbar-nav d-flex justify-content-center">
                 {% if current_user.is_authenticated %}
-                  {% if current_user.client %}
                       <li class="nav-item">
-                          <a class="nav-link" href="{{ url_for('client_s.account') }}">Account</a>
-                      </li>
-                  {% elif current_user.plumber %}
-                      <li class="nav-item">
-                          <a class="nav-link" href="{{ url_for('plums.profile') }}">My Account</a>
-                      </li>
-                  {% endif %}
-  
+                          <a class="nav-link" href="{{ url_for('main.accounts') }}">Account</a>
+                      </li>  
                   <li class="nav-item">
                       <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                   </li>

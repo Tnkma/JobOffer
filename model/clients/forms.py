@@ -122,4 +122,3 @@ class UpdateAccountForm(FlaskForm):
 class SelectState(FlaskForm):
     state = SelectField('State', choices=STATE_CHOICE)
     submit = SubmitField('Select State')
-    

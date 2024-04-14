@@ -73,8 +73,20 @@
                         {% else %}
                             {{ form.state(class="form-control") }}
                         {% endif %}
+                        <div class="form-group mt-2">
+                            {{ form.bio.label(class="form-control-label") }}
+                            {% if form.bio.errors %}
+                                {{ form.bio(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.bio.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.bio(class="form-control", style="height: 120px;") }}
+                            {% endif %}
                     </div>
-                <div class="mt-3">
+                <div class="mt-3  d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary btn-sm">Update Account</button>
                 </div>
             </fieldset>

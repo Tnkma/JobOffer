@@ -43,3 +43,18 @@ def logout():
     return redirect(url_for('main.home')) 
 
 
+@main.route('/accounts')
+def accounts():
+    """Checks the instance and routes the user to the account"""
+    if isinstance(current_user, Client):
+
+        # return render_template('second_profiles.html', title='Account')
+        return redirect(url_for('client_s.account'))
+    elif isinstance(current_user, Plumber):  # Check for plumber type (future use)
+        # return render_template('second_profile.html')
+        return redirect(url_for('plums.accounts'))
+    # Handle unexpected user types
+    else:
+        flash('Unexpected user type!', 'warning')
+        return redirect(url_for('main.home'))
+    
