@@ -102,7 +102,7 @@ def assigned_plumber():
         plumbers = (
             db.session.query(Plumber)
             .join(JobPlumber, JobPlumber.plumber_id == Plumber.id)
-            .filter(JobPlumber.job_id == job.id, JobPlumber.is_assigned == True)
+            .filter(JobPlumber.job_id == job.id, JobPlumber.is_assigned == False)
             .all()
         )
         assigned_plumbers[job] = plumbers

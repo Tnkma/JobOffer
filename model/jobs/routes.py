@@ -115,12 +115,12 @@ def view_applicants(job_id):
                         new(new_assignment)
                         save()
                         flash('Job successfully assigned!', 'success')
-                    return jsonify({'message': 'Job successfully assigned'})
+                    # return jsonify({'message': 'Job successfully assigned'})
                 else:
                     flash('Invalid plumber selection.', 'error')
             except ValueError:
                 flash('Invalid selection!', 'error')
 
-    return redirect(url_for('client_s.applicants', job=job))
+    return redirect(url_for('main.dashboard', job=job))
 
 

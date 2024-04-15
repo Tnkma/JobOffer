@@ -33,7 +33,7 @@ class JobPlumber(Base):
     id = Column(Integer, primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'))
     plumber_id = Column(Integer, ForeignKey('plumbers.id'))
-    is_assigned = Column(Boolean, default=False)
+    is_assigned = Column(Boolean, default=True)
     
     plumber = relationship('Plumber', backref='job_plumbers')
     job = relationship('Job', backref='job_plumbers')

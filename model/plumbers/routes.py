@@ -86,7 +86,7 @@ def plumbers_jobs():
     assigned_jobs = (
         db.session.query(Job)
         .join(JobPlumber, Job.id == JobPlumber.job_id)
-        .filter(JobPlumber.plumber_id == current_user.id, JobPlumber.is_assigned == True)
+        .filter(JobPlumber.plumber_id == current_user.id, JobPlumber.is_assigned == False)
         .all()
     )
     return render_template('plumber_jobs.html', title='Assigned Jobs', jobs=assigned_jobs)

@@ -9,9 +9,10 @@ main = Blueprint('main', __name__, url_prefix="/", template_folder='templates', 
 @main.route("/")
 @main.route("/home")
 def home():
-    """ Renders the homepage to everyone """
-    jobs = Job.query.all()
+    """Renders the homepage to everyone"""
+    jobs = Job.query.order_by(Job.date_posted.desc()).all()  # Ordering jobs by date_posted descending
     return render_template('home.html', jobs=jobs)
+
 
 
 @main.route('/dashboard')
