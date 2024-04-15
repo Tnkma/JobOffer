@@ -7,7 +7,7 @@
     <ul>
       {% for applicant in job_applicants.get(job.id) or [] %}
         <li>{{ applicant.username }}
-          <button type="button" class="btn btn-primary btn-sm mt-1"  data-bs-toggle="modal" data-bs-target="#assignModal{{ job.id }}{{ applicant.id }}">Assign</button>
+          <button type="button" class="btn btn-primary btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#assignModal{{ job.id }}{{ applicant.id }}">Assign</button>
           <!-- Modal -->
           <div class="modal fade" id="assignModal{{ job.id }}{{ applicant.id }}" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -18,7 +18,9 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <form action="{{ url_for('client_s.view_applicants', job_id=job.id, plumber_id=applicant.id) }}" method="POST">
+                  <form action="{{ url_for('job_route.view_applicants', job_id=job.id) }}" method="POST">
+                    <input type="hidden" name="job_id" value="{{ job.id }}">
+                    <input type="hidden" name="assigned_plumber" value="{{ applicant.id }}">
                     <input class="btn btn-primary" type="submit" value="Assign">
                   </form>
                 </div>

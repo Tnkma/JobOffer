@@ -82,60 +82,6 @@ def posted_jobs():
     jobs = Job.query.filter_by(client_id=current_user.id).all()
     return render_template('posted_jobs.html', jobs=jobs)
 
-
-@client_s.route("/applicants", methods=['GET', 'POST'], strict_slashes=False)
-@login_required
-def view_applicants():
-    """ View the list of applicants and assign plumbers for all of the current client's jobs """
-
-    # Get all jobs posted by the current client
-    current_user_jobs = Job.query.filter_by(client_id=current_user.id).all()
-    # Prepare a dictionary to store applicants for each job
-    job_applicants = {}
-    for job in current_user_jobs:
-        applicants = (
-            db.session.query(Plumber)
-            .join(JobPlumber, JobPlumber.plumber_id == Plumber.id)
-            .filter(JobPlumber.job_id == job.id)
-            .all()
-        )
-        job_applicants[job.id] = applicants
-    # Handle form submission for assigning a plumber
-    if request.method == 'POST':
-        selected_job_id = request.form.get('job_id')
-        selected_plumber_id = request.form.get('assigned_plumber')
-
-        if selected_job_id and selected_plumber_id:
-            try:
-                selected_job = Job.query.get(int(selected_job_id))
-                selected_plumber = Plumber.query.get(int(selected_plumber_id))
-
-                if selected_job and selected_plumber and selected_job.clients == current_user:
-                    # Check if an existing assignment exists for this job and plumber
-                    existing_assignment = JobPlumber.query.filter_by(job=selected_job, plumber=selected_plumber).first()
-                    if existing_assignment:
-                        existing_assignment.is_assigned = True
-                        flash('Job assigned already.', 'warning')
-                    else:
-                        # Create a new assignment if it doesn't exist
-                        new_assignment = JobPlumber(job=selected_job, plumber=selected_plumber, is_assigned=True)
-                        new(new_assignment)
-                        save()
-                        flash('Job successfully assigned!', 'success')
-                    return jsonify({'message': 'Job successfully assigned'})
-                else:
-                    flash('Invalid job or plumber selection.', 'error')
-            except ValueError:
-                flash('Invalid selection!', 'error')
-
-    return render_template(
-        'applicant.html',
-        title='View Applicants',
-        job_applicants=job_applicants,
-        current_user_jobs=current_user_jobs
-    
-    )
-    
     
     
 @client_s.route("/dashboard/get_plumber_by_state", methods=['GET', 'POST'])
@@ -163,3 +109,19 @@ def assigned_plumber():
     # Print the contents of assigned_plumbers for debugging
     return render_template('assigned_jobs.html', title='Assigned Plumbers', assigned_plumbers=assigned_plumbers)
 
+@client_s.route("/dashboard/applicants", methods=['GET', 'POST'])
+def applicants():
+    """view job applicants"""
+    current_user_jobs = Job.query.filter_by(client_id=current_user.id).all()
+
+    # Prepare a dictionary to store applicants for each job
+    job_applicants = {}
+    for job in current_user_jobs:
+        applicants = (
+            db.session.query(Plumber)
+            .join(JobPlumber, JobPlumber.plumber_id == Plumber.id)
+            .filter(JobPlumber.job_id == job.id)
+            .all()
+        )
+        job_applicants[job.id] = applicants
+    return render_template('applicant.html', current_user_jobs=current_user_jobs, job_applicants=job_applicants)

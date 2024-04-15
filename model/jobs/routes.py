@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from flask_login import current_user, login_required
-from flask import render_template, flash, redirect, Blueprint, url_for, request, abort
+from flask import render_template, flash, redirect, Blueprint, url_for, request, abort, jsonify
 from model.base import Job, JobPlumber, Client, Plumber
 from .utils import new, save, delete
 from .form import PostJobForm
@@ -86,3 +86,41 @@ def delete_job(job_id):
     delete(job)
     flash(f'Job deleted successfully!', 'success')
     return redirect(url_for('main.home'))
+
+
+@job_route.route("/jobs/<int:job_id>/assign", methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def view_applicants(job_id):
+    
+    """ Assign a plumber to a specific job """
+
+    job = Job.query.get_or_404(job_id)
+
+    if request.method == 'POST':
+        selected_plumber_id = request.form.get('assigned_plumber')
+
+        if selected_plumber_id:
+            try:
+                selected_plumber = Plumber.query.get(int(selected_plumber_id))
+
+                if selected_plumber:
+                    # Check if an existing assignment exists for this job and plumber
+                    existing_assignment = JobPlumber.query.filter_by(job=job, plumber=selected_plumber).first()
+                    if existing_assignment:
+                        existing_assignment.is_assigned = True
+                        flash('Job assigned already.', 'warning')
+                    else:
+                        # Create a new assignment if it doesn't exist
+                        new_assignment = JobPlumber(job=job, plumber=selected_plumber, is_assigned=True)
+                        new(new_assignment)
+                        save()
+                        flash('Job successfully assigned!', 'success')
+                    return jsonify({'message': 'Job successfully assigned'})
+                else:
+                    flash('Invalid plumber selection.', 'error')
+            except ValueError:
+                flash('Invalid selection!', 'error')
+
+    return redirect(url_for('client_s.applicants', job=job))
+
+
