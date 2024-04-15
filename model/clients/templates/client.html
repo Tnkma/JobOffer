@@ -3,33 +3,33 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('client_s.static', filename='plum.css') }}">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="container" method="POST" action="">
-    <div class="nav bg-secondary">
-        <ul class="sidebar flex-column">
-          <li class="nav-item">
+    <div class="nav">
+        <ul class="sidebar flex-column bg-secondary">
+          <li class="nav-item mt-2">
             <a href="" class="sidebar-link text-white" data-url="{{ url_for('client_s.assigned_plumber') }}" onclick="event.preventDefault()">
                 <i class="fs-6 fas fa-tachometer-alt"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Assigned Jobs</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item mt-2">
             <a href="{{ url_for('main.home') }}">
-                <i class="fs-6 fas fa-home"></i>
-                    <span class="fs-4 ms-3 d-none d-sm-inline">Home</span>
+                <i class="fs-5 fas fa-home"></i>
+                    <span class="fs-3 ms-3 d-none d-sm-inline">Home</span>
             </a>
           </li>
-          <li class="nav-item py-2 py-sm-0 mask">
+          <li class="nav-item py-2 py-sm-0 mask mt-2">
             <a href="#" class="sidebar-link text-white" data-url="{{ url_for('client_s.posted_jobs') }}" onclick="event.preventDefault()">
                 <i class="fs-5 fas fa-briefcase"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">Posted Jobs</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item mt-2">
             <a href="#" class="sidebar-link text-white" data-url="{{ url_for('client_s.view_applicants') }}"onclick="event.preventDefault()">
                 <i class="fs-6 fas fa-history"></i>
                     <span class="fs-4 ms-3 d-none d-sm-inline">View Applicants</span>
             </a>
           </li>
-          <li class="nav-item form-group">
+          <li class="nav-item form-group mt-2">
             <a href="#" class="sidebar-link text-white" data-url="{{ url_for('client_s.get_state') }}" onclick="event.preventDefault()">
               <i class="fs-6 fas fa-wrench"></i>
               <span class="fs-4 ms-3 d-none d-sm-inline">Get A Plumber</span>

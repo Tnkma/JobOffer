@@ -79,9 +79,9 @@ def accounts():
     return render_template('second_profile.html', title='Account', form=form)
 
 
-@plums.route("/dashboard/assigned_jobs", methods=['GET', 'POST'], strict_slashes=False)
+@plums.route("/plumbers_jobs", methods=['GET', 'POST'], strict_slashes=False)
 @login_required
-def assigned_jobs():
+def plumbers_jobs():
     """ Returns the list of jobs assigned to the current plumber """
     assigned_jobs = (
         db.session.query(Job)
@@ -89,12 +89,12 @@ def assigned_jobs():
         .filter(JobPlumber.plumber_id == current_user.id, JobPlumber.is_assigned == True)
         .all()
     )
-    return render_template('assigned_jobs.html', title='Assigned Jobs', jobs=assigned_jobs)
+    return render_template('plumber_jobs.html', title='Assigned Jobs', jobs=assigned_jobs)
 
 
-@plums.route("/dashboard/applied_jobs", methods=['GET', 'POST'], strict_slashes=False)
+@plums.route("/jobs_applied", methods=['GET', 'POST'], strict_slashes=False)
 @login_required
-def applied_jobs():
+def jobs_applied():
   """ Returns the list of jobs the current plumber has applied to """
   applied_jobs = (
     db.session.query(Job)
@@ -102,7 +102,7 @@ def applied_jobs():
     .filter(JobPlumber.plumber_id == current_user.id)
     .all()
   )
-  return render_template('applied_jobs.html', title='Applied Jobs', jobs=applied_jobs)
+  return render_template('jobs_applied.html', title='Applied Jobs', jobs=applied_jobs)
 
 
 

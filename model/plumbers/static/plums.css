@@ -1,7 +1,6 @@
 
 .nav-pills li a:hover {
     background-color: rgb(67, 70, 233);
-
 }
 
 .container {
@@ -9,15 +8,15 @@
 }
 
 .sidebar {
-    padding: 150px; /* Padding around sidebar content */
+    width: 350px; /* Adjust width as needed */
+    padding: 130px; /* Padding around sidebar content */
     margin-top: -70px;
-    width: 250px;
-    margin-left: 5px;
+    margin-left: -206px;
 }
 
 .sidebar-content {
     flex-grow: 1; /* Allow content to grow and fill remaining space */
-    padding: 0px; /* Padding around content */
+    padding: 10px; /* Padding around content */
     background-color: #ffffff; /* Content background color */
     flex: 1;
     margin-top: -30px;
@@ -25,16 +24,8 @@
 
 }
 .nav {
-    margin-left: -217px;
-    margin-top: -50px;
+    margin-left: -60px;    
+
 }
-
-.nav-nav {
-    margin-left: -80px;
-    margin-top: 10px;
-}
-
-
-
 
 

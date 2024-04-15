@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
-from model import app, bcrypt, login_manager
-from .forms import RegistrationForm, LoginForm, UpdateAccountForm, SelectState
+from model import bcrypt
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm
 from flask_login import current_user, login_user, login_required
-from flask import render_template, flash, redirect, request, Blueprint, url_for
+from flask import render_template, flash, redirect, request, Blueprint, url_for, jsonify
 from model.base import Client, Job, JobPlumber, Plumber
 from .utils import *
 
@@ -83,14 +83,13 @@ def posted_jobs():
     return render_template('posted_jobs.html', jobs=jobs)
 
 
-@client_s.route("/dashboard/applicants", methods=['GET', 'POST'], strict_slashes=False)
+@client_s.route("/applicants", methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def view_applicants():
     """ View the list of applicants and assign plumbers for all of the current client's jobs """
 
     # Get all jobs posted by the current client
     current_user_jobs = Job.query.filter_by(client_id=current_user.id).all()
-
     # Prepare a dictionary to store applicants for each job
     job_applicants = {}
     for job in current_user_jobs:
@@ -101,7 +100,6 @@ def view_applicants():
             .all()
         )
         job_applicants[job.id] = applicants
-
     # Handle form submission for assigning a plumber
     if request.method == 'POST':
         selected_job_id = request.form.get('job_id')
@@ -112,7 +110,7 @@ def view_applicants():
                 selected_job = Job.query.get(int(selected_job_id))
                 selected_plumber = Plumber.query.get(int(selected_plumber_id))
 
-                if selected_job and selected_plumber and selected_job.client == current_user:
+                if selected_job and selected_plumber and selected_job.clients == current_user:
                     # Check if an existing assignment exists for this job and plumber
                     existing_assignment = JobPlumber.query.filter_by(job=selected_job, plumber=selected_plumber).first()
                     if existing_assignment:
@@ -124,7 +122,7 @@ def view_applicants():
                         new(new_assignment)
                         save()
                         flash('Job successfully assigned!', 'success')
-                    return redirect(url_for('client_s.view_applicants', title='View Applicants', job_applicants=job_applicants, current_user_jobs=current_user_jobs))  # Refresh after assignment
+                    return jsonify({'message': 'Job successfully assigned'})
                 else:
                     flash('Invalid job or plumber selection.', 'error')
             except ValueError:
@@ -162,7 +160,6 @@ def assigned_plumber():
             .all()
         )
         assigned_plumbers[job] = plumbers
-
     # Print the contents of assigned_plumbers for debugging
     return render_template('assigned_jobs.html', title='Assigned Plumbers', assigned_plumbers=assigned_plumbers)
 

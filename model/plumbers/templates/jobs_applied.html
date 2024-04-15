@@ -1,0 +1,16 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('plums.static', filename='main.css') }}">
+
+{% for job in jobs %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <small class="text-muted"><strong>Date: </strong>{{ job.date_posted.strftime('%Y-%m-%d') }}</small>
+      <div class="mt-2">
+        <small class="text-muted"><strong>Location: </strong>{{ job.location }} State.</small>
+      </div>
+    </div>
+    <p class="article-content"><strong>Job Description: </strong>{{ job.job_description }}</p>
+    <!-- Add more job details here if needed -->
+  </div>
+</article>
+{% endfor %}

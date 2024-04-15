@@ -16,6 +16,6 @@
     </div>
   </article>
   <div class="btn  d-flex justify-content-end">
-    <button type="submit" class="btn btn-primary" href="url_for('job.route.apply_job')">Apply for the Job</button>
+    <a class="btn btn-primary" href="{{ url_for('job_route.apply_job', job_id=job.id) }}">Apply</a>
   </div>
 {% endblock content %}

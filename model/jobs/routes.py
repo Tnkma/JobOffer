@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from flask_login import current_user, login_required
 from flask import render_template, flash, redirect, Blueprint, url_for, request, abort
-from model.base import Job, JobPlumber
+from model.base import Job, JobPlumber, Client, Plumber
 from .utils import new, save, delete
 from .form import PostJobForm
 
@@ -11,6 +11,9 @@ job_route = Blueprint('job_route', __name__, url_prefix="/jobs", template_folder
 @login_required
 def post_new_job():
     """ Posts new job"""
+    if isinstance(current_user, Plumber):
+        flash(f'You cannot post a job!', 'danger')
+        return redirect(url_for('main.home'))
     form = PostJobForm()
     if form.validate_on_submit():
         job  = Job(
@@ -36,9 +39,13 @@ def job(job_id):
 @login_required
 def apply_job(job_id):
     """ Apply for a job """
+    
     job = Job.query.get_or_404(job_id)
     if job.clients == current_user:
         flash(f'You cannot apply for your own job!', 'danger')
+        return redirect(url_for('main.home'))
+    if isinstance(current_user, Client):
+        flash(f'You cannot apply for a job!', 'danger')
         return redirect(url_for('main.home'))
     job_plumber = JobPlumber(job_id=job.id, plumber_id=current_user.id)
     new(job_plumber)
