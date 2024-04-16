@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, AnonymousUserMixin
 from flask import render_template, flash, redirect, Blueprint, url_for, request, abort, jsonify
 from model.base import Job, JobPlumber, Client, Plumber
 from .utils import new, save, delete
@@ -8,9 +8,12 @@ from .form import PostJobForm
 job_route = Blueprint('job_route', __name__, url_prefix="/jobs", template_folder='templates', static_folder='static')
 
 @job_route.route("/jobs/new", methods=['GET', 'POST'], strict_slashes=False)
-@login_required
 def post_new_job():
     """ Posts new job"""
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+        flash(f'You need to login to post a job!', 'warning')
+        return redirect(url_for('main.home'))
+    
     if isinstance(current_user, Plumber):
         flash(f'You cannot post a job!', 'danger')
         return redirect(url_for('main.home'))
@@ -36,14 +39,18 @@ def job(job_id):
     return render_template('job.html', title=job.job_title, job=job)
 
 @job_route.route("/apply_job/<int:job_id>", strict_slashes=False)
-@login_required
 def apply_job(job_id):
     """ Apply for a job """
     
     job = Job.query.get_or_404(job_id)
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+        flash(f'You need to login to apply for the job!', 'warning')
+        return redirect(url_for('main.home'))
+    
     if job.clients == current_user:
         flash(f'You cannot apply for your own job!', 'danger')
         return redirect(url_for('main.home'))
+    
     if isinstance(current_user, Client):
         flash(f'You cannot apply for a job!', 'danger')
         return redirect(url_for('main.home'))

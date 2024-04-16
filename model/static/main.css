@@ -1,6 +1,9 @@
+@import url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+
 * {
   padding: 0;
   margin: 0;
+  font: 18px San Francisco, Arial, sans-serif;
 
 }
 
