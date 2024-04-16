@@ -80,18 +80,15 @@ class RegistrationForm(FlaskForm):
     state = SelectField('State', choices=STATE_CHOICE)
     submit = SubmitField('Sign Up')
     
+    
+    
     def validate_email(self, email):
         """ Validates the username """
         email = Plumber.query.filter_by(email=email.data).first()
         if email:
             raise ValidationError('This email already exist. Please choose a different one.')
         
-        
-    def validate_phone(self, phone):
-        """ Validates the username """
-        phone = Plumber.query.filter_by(phone=phone.data).first()
-        if phone:
-            raise ValidationError('This phone number already exist. Please choose a different one.')
+
 
 
 class LoginForm(FlaskForm):

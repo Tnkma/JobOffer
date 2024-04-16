@@ -7,7 +7,6 @@ from flask_wtf import FlaskForm
 from model.base import Client
 from flask_login import current_user
 
-
 STATE_CHOICE = [
     ('Abia', 'Abia'),
     ('Adamawa', 'Adamawa'),
@@ -48,27 +47,33 @@ STATE_CHOICE = [
     ('Zamfara', 'Zamfara')
 ]
 
-def validate_phone(FlaskForm, field):
+
+def validate_phone(form, field):
     """ Validates the client phone number and stores it with +234 prefix """
+    client = Client.query.filter_by(phone=field.data).first()
+    if client and client.id != getattr(form, 'obj_id', None):
+        raise ValidationError('This phone number already exists. Please choose a different one.')
+
     try:
-        phone_no = parse(field.data)  # Parse the phone number
-        if not is_valid_number(phone_no):
+        parsed_phone = parse(field.data, "NG")  # Parse the phone number with country code "NG" for Nigeria
+        if not is_valid_number(parsed_phone):
             raise ValueError("Invalid phone number")
 
         # Extract the national significant number
-        significant_number = national_significant_number(phone_no)
+        significant_number = national_significant_number(parsed_phone)
         # Prepend +234 country code
         phone_number_with_country_code = f'+234{significant_number}'
         # Update the field value with the formatted number
         field.data = phone_number_with_country_code
-        # print(field.data)
-        return field.data
+        return True
 
-    except (NumberParseException, ValueError):
+    except NumberParseException:
         raise ValidationError("Invalid phone number format")
+    except ValueError:
+        raise ValidationError("Invalid phone number")
 
 
-class RegistrationForm(FlaskForm):
+class RegistrationForm(FlaskForm):    
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
@@ -80,19 +85,13 @@ class RegistrationForm(FlaskForm):
     state = SelectField('State', choices=STATE_CHOICE)
     submit = SubmitField('Sign Up')
     
+    
+    
     def validate_email(self, email):
         """ Validates the username """
         email = Client.query.filter_by(email=email.data).first()
         if email:
             raise ValidationError('This email already exist. Please choose a different one.')
-        
-        
-    def validate_phone(self, phone):
-        """ Validates the username """
-        phone = Client.query.filter_by(phone=phone.data).first()
-        if phone:
-            raise ValidationError('This phone number already exist. Please choose a different one.')
-
 
 class LoginForm(FlaskForm):
     email = StringField('Email',

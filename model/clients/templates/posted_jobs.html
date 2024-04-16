@@ -1,4 +1,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('client_s.static', filename='main.css') }}">
+{% if not jobs %}
+  <p>No job yet.</p>
+{% endif %}
 {% for job in jobs %}
 <article class="media content-section">
     <div class="media-body">
@@ -11,9 +14,6 @@
               <a class="btn btn-secondary btn-sm mt-1" href="{{ url_for('job_route.update_job', job_id=job.id) }}">Update</a>
               <button type="button" class="btn btn-danger btn-sm mt-1"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
             </div>
-          {% if not job %}
-            <li>No job yet from {{ job.location }}.</li>
-          {% endif %}
         </div>
       </div>
       <p class="article-content">{{ job.job_description }}</p>

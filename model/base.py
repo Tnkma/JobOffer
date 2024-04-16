@@ -17,7 +17,7 @@ class BaseUser(Base, UserMixin):
     image_file = Column(String(20), nullable=False, default='default.jpg')
     password = Column(String(60), nullable=False)
     date_joined = Column(DateTime, nullable=False, default=datetime.utcnow)
-    phone = Column(String(14), unique=True, nullable=False)
+    phone = Column(String(14), nullable=False)
     state = Column(String(20), nullable=False)
     
     def __repr__(self):
