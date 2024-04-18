@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 from model import bcrypt
-from .forms import RegistrationForm, LoginForm, UpdateAccountForm
-from flask_login import current_user, login_user, login_required
-from flask import render_template, flash, redirect, request, Blueprint, url_for, jsonify
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm, SelectState
+from flask_login import current_user, login_user
+from flask import render_template, flash, redirect, request, Blueprint, url_for
 from model.base import Client, Job, JobPlumber, Plumber
 from .utils import *
 
@@ -86,10 +86,10 @@ def posted_jobs():
     
 @client_s.route("/dashboard/get_plumber_by_state", methods=['GET', 'POST'])
 def get_state():    
-    """gets plumbers based on sate"""
-    states = 'Abia'
+    """gets plumbers based on state"""
+    states= SelectState()
     plumber = Plumber.query.filter_by(state=states).all()
-    return render_template('get_plum.html', form=form, plumber=plumber)  # Pass form for error display
+    return render_template('get_plum.html', states=states, plumber=plumber)  # Pass form for error display
 
 
 
