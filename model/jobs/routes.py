@@ -113,8 +113,8 @@ def view_applicants(job_id):
                 if selected_plumber:
                     # Check if an existing assignment exists for this job and plumber
                     existing_assignment = JobPlumber.query.filter_by(job=job, plumber=selected_plumber).first()
-                    if existing_assignment:
-                        existing_assignment.is_assigned = True
+                    if existing_assignment.is_assigned == True:
+                        # existing_assignment.is_assigned = True
                         flash('Job assigned already.', 'warning')
                     else:
                         # Create a new assignment if it doesn't exist
